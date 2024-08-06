@@ -1,0 +1,136 @@
+services:
+  # postgres:
+  #   container_name: postgres_container
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: root
+  #     PGDATA: /data/postgres
+  #   volumes:
+  #     - ./Registration:/data/postgres
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  #
+  # postgres_keycloak:
+  #   container_name: postgres_keycloak_container
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_DB: keycloak
+  #     POSTGRES_USER: keycloak
+  #     POSTGRES_PASSWORD: root
+  #     PGDATA: /data/postgres_keycloak
+  #   volumes:
+  #     - ./keycloak/DB:/data/postgres_keycloak
+  #   ports:
+  #     - "5433:5432"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  #
+  # postgres_email:
+  #   container_name: postgres_email
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: email
+  #     POSTGRES_PASSWORD: root
+  #     PGDATA: /data/postgres
+  #   volumes:
+  #     - ./Email:/data/postgres
+  #   ports:
+  #     - "5434:5432"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  #
+  # pgadmin:
+  #   container_name: pgadmin_container
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-lahiruthpala@gmail.com}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-root}
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   volumes:
+  #     - ./pgAdmin:/var/lib/pgadmin
+  #   ports:
+  #     - "5050:80"
+  #   networks:
+  #     - postgres
+  #   restart: unless-stopped
+  #   user: root  # This allows pgAdmin to write to the volume
+  #   command: >
+  #     /bin/sh -c "
+  #     mkdir -p /var/lib/pgadmin/sessions &&
+  #     chown -R pgadmin:pgadmin /var/lib/pgadmin &&
+  #     /entrypoint.sh
+      # "
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - postgres
+
+  keycloak:
+    container_name: keycloak_container
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+        KEYCLOAK_ADMIN: admin
+        KEYCLOAK_ADMIN_PASSWORD: admin
+        KC_DB: postgres
+        KC_DB_URL: jdbc:postgresql://ep-rapid-art-a19zj9ql.ap-southeast-1.aws.neon.tech/Keycloak?sslmode=require
+        KC_DB_USERNAME: voterRegistration_owner
+        KC_DB_PASSWORD: bAEhOwT8BiP9
+    ports:
+        - "8086:8080"
+    networks:
+        - postgres
+    restart: unless-stopped
+    command: ["start-dev", "--import-realm"]
+    volumes:
+        - ./keycloak/realms/:/opt/keycloak/data/import/
+        - ./keycloak/Theme2/:/opt/keycloak/providers/
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+    networks:
+      - postgres
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - postgres
+
+networks:
+  microservices-network:
+    driver: bridge
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  postgres_keycloak:
+  pgadmin:
