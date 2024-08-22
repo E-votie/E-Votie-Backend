@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Email_ms" />
+        <module name="Party_ms" />
+        <module name="service-reg" />
+        <module name="Election_ms" />
+        <module name="Registration_ms" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Election_ms" options="-parameters" />
+      <module name="Email_ms" options="-parameters" />
+      <module name="Party_ms" options="-parameters" />
+      <module name="Registration_ms" options="-parameters" />
+      <module name="service-reg" options="-parameters" />
+    </option>
+  </component>
+</project>
