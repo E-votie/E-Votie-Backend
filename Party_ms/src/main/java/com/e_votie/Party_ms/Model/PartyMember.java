@@ -1,5 +1,6 @@
 package com.e_votie.Party_ms.Model;
 
+import com.e_votie.Party_ms.DTO.Voter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,11 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "party members")
-public class PartyMember {
-
-    @Id
-    @Column(name = "nic", nullable = false)
-    private String NIC;
+public class PartyMember extends Voter {
 
     private String firstName;
     private String lastName;
@@ -36,8 +33,8 @@ public class PartyMember {
     @JoinColumn(name = "party_id", nullable = false)
     private Party party;
 
-    @OneToOne
+    @OneToMany
     @JoinColumn(name = "manifesto_id")
-    private Manifesto manifesto;
+    private List<Manifesto> manifestos;
 
 }

@@ -18,32 +18,19 @@ public class Party {
     @Column(name = "registration_number")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer registrationId;
-
-    @Column(nullable = false)
     private String partyName;
-
     private String abbreviation;
     private LocalDate foundedDate;
     private String leader;
-
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String postalCode;
-    private String contactNumber;
-
-    private String symbol; // To store the path or name of the uploaded party symbol
     private String partyColors;
-
-    @Column(columnDefinition = "TEXT")
-    private String constitution; // To store the path or name of the uploaded constitution
-
-    @Column(columnDefinition = "TEXT")
-    private String financialStatements; // To store the path or name of the uploaded financial statements
-
-    @Column(columnDefinition = "TEXT")
-    private String declaration; // To store the path or name of the uploaded declaration
-
+    private String symbol;
+    private String constitution;
+    private String financialStatement;
+    private String declaration;
     @Column(name = "party_status", columnDefinition = "VARCHAR(255) DEFAULT 'pending verification'")
     private String status;
+
+    @OneToOne
+    private PartyMember partySecretary;
+
 }

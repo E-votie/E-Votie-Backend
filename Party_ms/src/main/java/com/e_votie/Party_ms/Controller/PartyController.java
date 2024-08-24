@@ -3,8 +3,10 @@ package com.e_votie.Party_ms.Controller;
 import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Service.PartyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +22,8 @@ public class PartyController {
 
     //new Party
     @PostMapping
-    public ResponseEntity<Party> createParty(@RequestBody Party party) throws Exception {
+    public ResponseEntity<Party> createParty(@RequestBody Party party, @AuthenticationPrincipal OAuth2ResourceServerProperties.Jwt jwt ) throws Exception {
+        String userId = jwt.getClaimAsString("sub");
 
         Party createdParty = partyService.createParty(party);
         return new ResponseEntity<>(createdParty, HttpStatus.CREATED);
