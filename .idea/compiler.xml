@@ -10,6 +10,7 @@
         <module name="Email_ms" />
         <module name="Party_ms" />
         <module name="service-reg" />
+        <module name="File_ms" />
         <module name="Election_ms" />
         <module name="Registration_ms" />
       </profile>
@@ -19,6 +20,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Election_ms" options="-parameters" />
       <module name="Email_ms" options="-parameters" />
+      <module name="File_ms" options="-parameters" />
       <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
       <module name="service-reg" options="-parameters" />
