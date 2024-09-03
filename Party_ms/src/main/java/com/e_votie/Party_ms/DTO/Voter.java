@@ -1,21 +1,16 @@
 package com.e_votie.Party_ms.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Voter {
 
-    @Id
+    @JsonProperty("VoterID")
     private String VoterID;
     @JsonProperty("ApplicationID")
     private String applicationID;
@@ -51,5 +46,4 @@ public class Voter {
     private String gramaNiladhariDivision;
     @JsonProperty("Status")
     private String status;
-
 }

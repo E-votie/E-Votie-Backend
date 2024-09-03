@@ -6,35 +6,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "party members")
-public class PartyMember extends Voter {
+//@PrimaryKeyJoinColumn(name = "VoterID")
+public class PartyMember{
 
-    private String firstName;
-    private String lastName;
-    private String email;
+    @Id
+    String partyMemberId; //save voter id here. is a relationship is removed since the relationship can not be created with a dto.
+
+    private String NIC;
     private String role;
 
-    @ElementCollection
-    private List<String> phoneNumbers;
-
-    private String pollingNumber;
-    private String pollingDivision;
-    private String gramaNiladhariDivision;
-    private String divisionalSecretariatArea;
-    private String electoralDistrict;
-
     @ManyToOne
-    @JoinColumn(name = "party_id", nullable = false)
+    @JoinColumn(name = "partyId", nullable = false)
     private Party party;
 
-    @OneToMany
-    @JoinColumn(name = "manifesto_id")
-    private List<Manifesto> manifestos;
+    @OneToMany(mappedBy = "partyMember")
+    private List<Manifesto> manifestos = new ArrayList<>();
 
+    @ElementCollection
+    private List<String> topics = new ArrayList<>();
 }

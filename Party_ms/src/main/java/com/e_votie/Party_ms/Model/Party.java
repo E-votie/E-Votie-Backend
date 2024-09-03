@@ -1,11 +1,14 @@
 package com.e_votie.Party_ms.Model;
 
+import com.e_votie.Party_ms.DTO.Voter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,22 +18,29 @@ import java.time.LocalDate;
 public class Party {
 
     @Id
-    @Column(name = "registration_number")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer registrationId;
     private String partyName;
     private String abbreviation;
     private LocalDate foundedDate;
-    private String leader;
-    private String partyColors;
+
+    @ElementCollection
+    private List<String> partyColors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "party")
+    private List<PartyMember> partyMembers;
+
     private String symbol;
     private String constitution;
     private String financialStatement;
     private String declaration;
-    @Column(name = "party_status", columnDefinition = "VARCHAR(255) DEFAULT 'pending verification'")
+    private String otherDocuments;
+
+    @Column(name = "partyStatus", columnDefinition = "VARCHAR(255) DEFAULT 'pending verification'")
     private String status;
 
-    @OneToOne
-    private PartyMember partySecretary;
+    @ManyToOne
+    @JoinColumn(name = "verificationOfficerId")
+    private VerificationOfficer verificationOfficer;
 
 }
