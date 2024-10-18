@@ -2,12 +2,15 @@ package com.e_votie.Party_ms.Service;
 
 import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Repository.PartyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class PartyService {
 
@@ -15,7 +18,9 @@ public class PartyService {
     private PartyRepository partyRepository;
 
     // Method to create a new Party
-    public Party createParty(Party party) {
+    public Party createParty(Party party, Jwt jwt) {
+        String userId = jwt.getClaimAsString("sub");
+        log.info(userId);
         return partyRepository.save(party);
     }
 
@@ -48,16 +53,9 @@ public class PartyService {
             existingParty.setPartyName(party.getPartyName());
             existingParty.setAbbreviation(party.getAbbreviation());
             existingParty.setFoundedDate(party.getFoundedDate());
-            existingParty.setLeader(party.getLeader());
-            existingParty.setAddressLine1(party.getAddressLine1());
-            existingParty.setAddressLine2(party.getAddressLine2());
-            existingParty.setCity(party.getCity());
-            existingParty.setPostalCode(party.getPostalCode());
-            existingParty.setContactNumber(party.getContactNumber());
             existingParty.setSymbol(party.getSymbol());
             existingParty.setPartyColors(party.getPartyColors());
             existingParty.setConstitution(party.getConstitution());
-            existingParty.setFinancialStatements(party.getFinancialStatements());
             existingParty.setDeclaration(party.getDeclaration());
             existingParty.setStatus(party.getStatus());
 

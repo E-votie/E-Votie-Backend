@@ -1,14 +1,20 @@
 package com.e_votie.Party_ms.Controller;
 
+import com.e_votie.Party_ms.DTO.Voter;
 import com.e_votie.Party_ms.Model.PartyMember;
 import com.e_votie.Party_ms.Service.PartyMemberService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("api/party/member")
 public class PartyMemberController {
@@ -28,18 +34,18 @@ public class PartyMemberController {
     }
 
     // Endpoint to get all party members of a given party
-    @GetMapping("/all")
-    public ResponseEntity<List<PartyMember>> getPartyMembersByPartyId(@RequestParam String partyId) throws Exception {
-        List<PartyMember> partyMembers = partyMemberService.getPartyMembersByPartyId(partyId);
-        return new ResponseEntity<>(partyMembers, HttpStatus.OK);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<List<PartyMember>> getPartyMembersByPartyId(@RequestParam String partyId) throws Exception {
+//        List<PartyMember> partyMembers = partyMemberService.getPartyMembersByPartyId(partyId);
+//        return new ResponseEntity<>(partyMembers, HttpStatus.OK);
+//    }
 
     // Endpoint to get party member given member name
-    @GetMapping("/search")
-    public ResponseEntity<List<PartyMember>> getPartyMemberByMemberName(@RequestParam String name) throws Exception {
-        List<PartyMember> partyMembers = partyMemberService.getPartyMemberByMemberName(name);
-        return new ResponseEntity<>(partyMembers, HttpStatus.OK);
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<List<PartyMember>> getPartyMemberByMemberName(@RequestParam String name) throws Exception {
+//        List<PartyMember> partyMembers = partyMemberService.getPartyMemberByMemberName(name);
+//        return new ResponseEntity<>(partyMembers, HttpStatus.OK);
+//    }
 
     //Endpoint to get party member by nic
     @GetMapping
@@ -70,7 +76,5 @@ public class PartyMemberController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 
 }

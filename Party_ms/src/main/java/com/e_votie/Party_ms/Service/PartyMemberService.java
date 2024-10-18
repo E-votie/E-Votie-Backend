@@ -4,12 +4,15 @@ import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Model.PartyMember;
 import com.e_votie.Party_ms.Repository.PartyMemberRepository;
 import com.e_votie.Party_ms.Repository.PartyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class PartyMemberService {
 
@@ -18,6 +21,9 @@ public class PartyMemberService {
 
     @Autowired
     private PartyMemberRepository partyMemberRepository;
+
+    @Autowired
+    private VoterService voterService;
 
     //Method to register a new party member
     public PartyMember registerNewPartyMember(String partyId, PartyMember partyMember) throws Exception {
@@ -32,20 +38,20 @@ public class PartyMemberService {
     }
 
     //Method to retrieve party members of a given party
-    public List<PartyMember> getPartyMembersByPartyId(String partyId) throws Exception {
-        Optional<Party> partyOptional = partyRepository.findById(Integer.valueOf(partyId));
-
-        if (partyOptional.isPresent()) {
-            return partyMemberRepository.findAllByParty_registrationId(Integer.valueOf(partyId));
-        } else {
-            throw new Exception("Party with ID " + partyId + " not found");
-        }
-    }
+//    public List<PartyMember> getPartyMembersByPartyId(String partyId) throws Exception {
+//        Optional<Party> partyOptional = partyRepository.findById(Integer.valueOf(partyId));
+//
+//        if (partyOptional.isPresent()) {
+//            return partyMemberRepository.findAllByRegistrationId(Integer.valueOf(partyId));
+//        } else {
+//            throw new Exception("Party with ID " + partyId + " not found");
+//        }
+//    }
 
     //Method to search party members by from a given member name
-    public List<PartyMember> getPartyMemberByMemberName(String memberName) {
-        return partyMemberRepository.findByFullNameContaining(memberName);
-    }
+//    public List<PartyMember> getPartyMemberByMemberName(String memberName) {
+//        return partyMemberRepository.findByFullNameContaining(memberName);
+//    }
 
     //Method to retrieve party member using given nic
     public PartyMember getPartyMemberByNIC(String nic) throws Exception {
@@ -58,16 +64,16 @@ public class PartyMemberService {
         PartyMember existMember = getPartyMemberByNIC(nic);
 
         // Update the existing member's details
-        existMember.setFirstName(updatedPartyMember.getFirstName());
-        existMember.setLastName(updatedPartyMember.getLastName());
-        existMember.setEmail(updatedPartyMember.getEmail());
-        existMember.setRole(updatedPartyMember.getRole());
-        existMember.setPhoneNumbers(updatedPartyMember.getPhoneNumbers());
-        existMember.setPollingNumber(updatedPartyMember.getPollingNumber());
-        existMember.setPollingDivision(updatedPartyMember.getPollingDivision());
-        existMember.setGramaNiladhariDivision(updatedPartyMember.getGramaNiladhariDivision());
-        existMember.setDivisionalSecretariatArea(updatedPartyMember.getDivisionalSecretariatArea());
-        existMember.setElectoralDistrict(updatedPartyMember.getElectoralDistrict());
+//        existMember.setFirstName(updatedPartyMember.getFirstName());
+//        existMember.setLastName(updatedPartyMember.getLastName());
+//        existMember.setEmail(updatedPartyMember.getEmail());
+//        existMember.setRole(updatedPartyMember.getRole());
+//        existMember.setPhoneNumbers(updatedPartyMember.getPhoneNumbers());
+//        existMember.setPollingNumber(updatedPartyMember.getPollingNumber());
+//        existMember.setPollingDivision(updatedPartyMember.getPollingDivision());
+//        existMember.setGramaNiladhariDivision(updatedPartyMember.getGramaNiladhariDivision());
+//        existMember.setDivisionalSecretariatArea(updatedPartyMember.getDivisionalSecretariatArea());
+//        existMember.setElectoralDistrict(updatedPartyMember.getElectoralDistrict());
 
         // Check if the party needs to be updated
         if (updatedPartyMember.getParty() != null) {
@@ -87,7 +93,6 @@ public class PartyMemberService {
     public void deletePartyMember(String nic) throws Exception {
         partyMemberRepository.delete(getPartyMemberByNIC(nic));
     }
-
 
 
 }

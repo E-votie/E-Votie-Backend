@@ -1,11 +1,14 @@
 package com.e_votie.Party_ms.Model;
 
+import com.e_votie.Party_ms.DTO.Voter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,35 +18,29 @@ import java.time.LocalDate;
 public class Party {
 
     @Id
-    @Column(name = "registration_number")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer registrationId;
-
-    @Column(nullable = false)
     private String partyName;
-
     private String abbreviation;
     private LocalDate foundedDate;
-    private String leader;
 
-    private String addressLine1;
-    private String addressLine2;
-    private String city;
-    private String postalCode;
-    private String contactNumber;
+    @ElementCollection
+    private List<String> partyColors = new ArrayList<>();
 
-    private String symbol; // To store the path or name of the uploaded party symbol
-    private String partyColors;
+    @OneToMany(mappedBy = "party")
+    private List<PartyMember> partyMembers;
 
-    @Column(columnDefinition = "TEXT")
-    private String constitution; // To store the path or name of the uploaded constitution
+    private String symbol;
+    private String constitution;
+    private String financialStatement;
+    private String declaration;
+    private String otherDocuments;
 
-    @Column(columnDefinition = "TEXT")
-    private String financialStatements; // To store the path or name of the uploaded financial statements
-
-    @Column(columnDefinition = "TEXT")
-    private String declaration; // To store the path or name of the uploaded declaration
-
-    @Column(name = "party_status", columnDefinition = "VARCHAR(255) DEFAULT 'pending verification'")
+    @Column(name = "partyStatus", columnDefinition = "VARCHAR(255) DEFAULT 'pending verification'")
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "verificationOfficerId")
+    private VerificationOfficer verificationOfficer;
+
 }

@@ -10,15 +10,21 @@
         <module name="Email_ms" />
         <module name="Party_ms" />
         <module name="service-reg" />
-        <module name="Election_ms" />
+        <module name="Announcement_ms" />
         <module name="Registration_ms" />
+        <module name="File_ms" />
+        <module name="Inquiry_ms" />
+        <module name="Election_ms" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Announcement_ms" options="-parameters" />
       <module name="Election_ms" options="-parameters" />
       <module name="Email_ms" options="-parameters" />
+      <module name="File_ms" options="-parameters" />
+      <module name="Inquiry_ms" options="-parameters" />
       <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
       <module name="service-reg" options="-parameters" />
