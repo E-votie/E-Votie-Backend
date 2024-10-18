@@ -35,8 +35,12 @@ public class VoterController {
 
     @GetMapping("/my_details")
     public ResponseEntity<?> getMyDetails(@AuthenticationPrincipal Jwt jwt){
-        String NIC = jwt.getClaimAsString("preferred_username");
+//        String NIC = jwt.getClaimAsString("preferred_username");
+        String NIC = "damitha";
+        log.info("Token is"+String.valueOf(jwt));
+        log.info(NIC);
         Voter voter = voterService.getMyDetails(NIC);
+        log.info(String.valueOf(voter));
         if(voter != null){
             Map<String, Object> response = new HashMap<>();
             response.put("voter", voter);
