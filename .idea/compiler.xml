@@ -7,25 +7,33 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Email_ms" />
+        <module name="Party_ms" />
+        <module name="service-reg" />
+        <module name="Announcement_ms" />
+        <module name="Registration_ms" />
+        <module name="Fingerprint_ms" />
+        <module name="File_ms" />
+        <module name="Inquiry_ms" />
+        <module name="Election_ms" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api_gateteway" target="17" />
-      <module name="Election_ms" target="17" />
-      <module name="Email_ms" target="17" />
       <module name="FileManagement_MS" target="17" />
-      <module name="Fingerprint_ms" target="17" />
       <module name="party-service" target="17" />
-      <module name="Registration_ms" target="17" />
-      <module name="service-reg" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Announcement_ms" options="-parameters" />
       <module name="Election_ms" options="-parameters" />
       <module name="Email_ms" options="-parameters" />
       <module name="FileManagement_MS" options="-parameters" />
+      <module name="File_ms" options="-parameters" />
       <module name="Fingerprint_ms" options="-parameters" />
+      <module name="Inquiry_ms" options="-parameters" />
+      <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
       <module name="api_gateteway" options="-parameters" />
       <module name="party-service" options="-parameters" />
