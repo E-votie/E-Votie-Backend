@@ -14,12 +14,12 @@
         <module name="Registration_ms" />
         <module name="Fingerprint_ms" />
         <module name="File_ms" />
+        <module name="api_gateteway" />
         <module name="Inquiry_ms" />
         <module name="Election_ms" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api_gateteway" target="17" />
       <module name="FileManagement_MS" target="17" />
       <module name="party-service" target="17" />
     </bytecodeTargetLevel>
