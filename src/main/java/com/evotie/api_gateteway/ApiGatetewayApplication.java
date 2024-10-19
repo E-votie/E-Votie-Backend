@@ -23,7 +23,7 @@ public class ApiGatetewayApplication {
 								.filter(new RemoveCorsHeadersGatewayFilterFactory().apply(new RemoveCorsHeadersGatewayFilterFactory.Config())))
 						.uri("http://localhost:8086"))
 				.route("registration_ms", r -> r
-						.path("/voter-registration/**")
+						.path("/voter-registration/**","/gramaniladhari/**")
 						.filters(f -> f
 								.filter(new RemoveCorsHeadersGatewayFilterFactory().apply(new RemoveCorsHeadersGatewayFilterFactory.Config())))
 						.uri("http://localhost:8081"))
