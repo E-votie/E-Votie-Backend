@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration Application Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+        }
+        h1 {
+            color: #EC4899;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #EC4899;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Voter Registration Application Status</h1>
+
+    <p>Dear Voter,</p>
+
+    <p>We are pleased to inform you that your voter registration application has been successfully received and is currently being processed.</p>
+
+    <p><strong>Application Number:</strong> <span th:text="${applicationNumber}"></span></p>
+
+    <p>To check the status of your application at any time, please click the button below:</p>
+
+    <a href="#" class="button" th:href="@{http://localhost:5173/track-application/${applicationNumber}}">
+        Track Your Application
+    </a>
+
+    <p>Thank you for registering as a voter. We appreciate your cooperation and look forward to assisting you throughout this process. Should you need further assistance, feel free to contact our support team.</p>
+
+    <p>Kind regards,</p>
+    <p>The Election Commission of Sri Lanka</p>
+
+    <div class="footer">
+        <p>Please do not reply to this email. For assistance, visit our <a href="https://example.com/contact">contact page</a>.</p>
+    </div>
+</div>
+</body>
+</html>

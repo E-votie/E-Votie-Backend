@@ -1,6 +1,7 @@
 package com.evotie.registration_ms.voter_registration.impl;
 
 import com.evotie.registration_ms.voter_registration.DTO.*;
+import com.evotie.registration_ms.voter_registration.Service.FileMsClient;
 import com.evotie.registration_ms.voter_registration.Service.KeycloakService;
 import com.evotie.registration_ms.voter_registration.Service.S3Service;
 import com.evotie.registration_ms.voter_registration.Service.VoterService_Hyperlegerfabric;
@@ -37,8 +38,9 @@ public class VoterRegistrationServiceImpl implements VoterRegistrationService {
     private final VoterService_Hyperlegerfabric voterService;
     private final ModelMapper modelMapper;
     private final KeycloakService keycloakService;
+    private final FileMsClient fileMsClient;
 
-    public VoterRegistrationServiceImpl(VoterRegistrationRepo voterRegistrationRepo, S3Service s3Service, KafkaProducer kafkaProducer, TempContactInfoRepo tempContactInfoRepo, VoterService_Hyperlegerfabric voterService, ModelMapper modelMapper, VoterRepo voterRepo, KeycloakService keycloakService) {
+    public VoterRegistrationServiceImpl(VoterRegistrationRepo voterRegistrationRepo, S3Service s3Service, KafkaProducer kafkaProducer, TempContactInfoRepo tempContactInfoRepo, VoterService_Hyperlegerfabric voterService, ModelMapper modelMapper, VoterRepo voterRepo, KeycloakService keycloakService, FileMsClient fileMsClient) {
         this.voterRegistrationRepo = voterRegistrationRepo;
         this.kafkaProducer = kafkaProducer;
         this.tempContactInfoRepo = tempContactInfoRepo;
@@ -47,6 +49,7 @@ public class VoterRegistrationServiceImpl implements VoterRegistrationService {
         this.modelMapper = modelMapper;
         this.voterRepo = voterRepo;
         this.keycloakService = keycloakService;
+        this.fileMsClient = fileMsClient;
     }
 
     @Override
@@ -203,9 +206,9 @@ public class VoterRegistrationServiceImpl implements VoterRegistrationService {
         VoterApplicationDTO voterApplicationDTO = new VoterApplicationDTO();
         if (voterRegistration != null) {
             BeanUtils.copyProperties(voterRegistration, voterApplicationDTO);
-            voterApplicationDTO.setPhoto(s3Service.generatePresignedUrlServise(applicationID + "_Face.jpg"));
-            voterApplicationDTO.setNICBack(s3Service.generatePresignedUrlServise(applicationID + "_NICBack.jpg"));
-            voterApplicationDTO.setNICFront(s3Service.generatePresignedUrlServise(applicationID + "_NICFront.jpg"));
+            voterApplicationDTO.setPhoto(fileMsClient.getFileUrl(applicationID + "_Face.jpg"));
+            voterApplicationDTO.setNICBack(fileMsClient.getFileUrl(applicationID + "_NICBack.jpg"));
+            voterApplicationDTO.setNICFront(fileMsClient.getFileUrl(applicationID + "_NICFront.jpg"));
         }
         return voterApplicationDTO;
     }
