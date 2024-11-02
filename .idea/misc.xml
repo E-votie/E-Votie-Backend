@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Email_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Party_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Election_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Registration_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/service-reg/pom.xml" />
+        <option value="$PROJECT_DIR$/File_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Announcement_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Inquiry_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/Fingerprint_ms/pom.xml" />
+        <option value="$PROJECT_DIR$/api_gateteway/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

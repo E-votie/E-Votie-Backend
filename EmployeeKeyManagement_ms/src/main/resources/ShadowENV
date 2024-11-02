@@ -1,0 +1,4 @@
+// Rename this -> Filename: .env
+PRIVATE_KEY= // Put your private key of the wallet here
+CONTRACT_ADDRESS= // Put the contract address of the Employ Management Contract here
+INFURA_API_KEY= // Put your Infura API key here

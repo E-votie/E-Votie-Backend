@@ -8,8 +8,6 @@ import com.evotie.registration_ms.voter_registration.data_entity.VoterRegistrati
 import com.evotie.registration_ms.voter_registration.DTO.VoterVerify;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
