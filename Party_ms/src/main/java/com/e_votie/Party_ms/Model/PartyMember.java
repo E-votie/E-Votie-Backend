@@ -1,43 +1,34 @@
 package com.e_votie.Party_ms.Model;
 
+import com.e_votie.Party_ms.DTO.Voter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "party members")
-public class PartyMember {
+//@PrimaryKeyJoinColumn(name = "VoterID")
+public class PartyMember{
 
     @Id
-    @Column(name = "nic", nullable = false)
-    private String NIC;
+    String partyMemberId; //save voter id here. is a relationship is removed since the relationship can not be created with a dto.
 
-    private String firstName;
-    private String lastName;
-    private String email;
+    private String NIC;
     private String role;
 
-    @ElementCollection
-    private List<String> phoneNumbers;
-
-    private String pollingNumber;
-    private String pollingDivision;
-    private String gramaNiladhariDivision;
-    private String divisionalSecretariatArea;
-    private String electoralDistrict;
-
     @ManyToOne
-    @JoinColumn(name = "party_id", nullable = false)
+    @JoinColumn(name = "partyId", nullable = false)
     private Party party;
 
-    @OneToOne
-    @JoinColumn(name = "manifesto_id")
-    private Manifesto manifesto;
+    @OneToMany(mappedBy = "partyMember")
+    private List<Manifesto> manifestos = new ArrayList<>();
 
+    @ElementCollection
+    private List<String> topics = new ArrayList<>();
 }

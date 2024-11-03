@@ -22,12 +22,12 @@ public class Manifesto {
 
     private String manifestoName;
     private LocalDate createdDate;
-    private Float progress; //thinking of storing progress as a percentage
+    private Float progress; // Store progress as a percentage
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "partyMemberId", nullable = false)
     private PartyMember partyMember;
 
     @OneToMany
     private List<Promise> promises;
-
 }

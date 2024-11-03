@@ -9,22 +9,30 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Party_ms" />
         <module name="Email_ms" />
+        <module name="service-reg" />
+        <module name="EmployeeKeyManagement_ms" />
+        <module name="Announcement_ms" />
+        <module name="Registration_ms" />
+        <module name="Fingerprint_ms" />
         <module name="File_ms" />
+        <module name="Inquiry_ms" />
+        <module name="Election_ms" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Announcement_ms" target="17" />
-      <module name="Election_ms" target="17" />
-      <module name="Inquiry_ms" target="17" />
-      <module name="Registration_ms" target="17" />
-      <module name="service-reg" target="17" />
+      <module name="HyperledgerFabricClient_ms" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Announcement_ms" options="-parameters" />
       <module name="Election_ms" options="-parameters" />
-      <module name="Email_ms" options="" />
+      <module name="Email_ms" options="-parameters" />
+      <module name="EmployeeKeyManagement_ms" options="-parameters" />
       <module name="File_ms" options="-parameters" />
+      <module name="Fingerprint_ms" options="-parameters" />
+      <module name="HyperledgerFabricClient_ms" options="-parameters" />
+      <module name="Inquiry_ms" options="-parameters" />
       <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
       <module name="service-reg" options="-parameters" />

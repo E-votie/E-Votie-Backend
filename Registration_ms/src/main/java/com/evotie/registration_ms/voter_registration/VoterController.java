@@ -22,6 +22,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/voter")
+@CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class VoterController {
 
@@ -37,6 +38,7 @@ public class VoterController {
     public ResponseEntity<?> getMyDetails(@AuthenticationPrincipal Jwt jwt){
         String NIC = jwt.getClaimAsString("preferred_username");
         Voter voter = voterService.getMyDetails(NIC);
+        log.info(String.valueOf(voter));
         if(voter != null){
             Map<String, Object> response = new HashMap<>();
             response.put("voter", voter);
@@ -66,5 +68,18 @@ public class VoterController {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "successful");
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{nic}")
+    private ResponseEntity<?> getVoter(@PathVariable String nic){
+        try{
+            Voter existingVoter = voterService.getVoter(nic);
+            if (existingVoter == null){
+                return new ResponseEntity<>("Not a Registered Voter", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(existingVoter, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Voter Not Found", HttpStatus.NOT_FOUND);
+        }
     }
 }

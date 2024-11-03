@@ -2,14 +2,20 @@ package com.e_votie.Party_ms.Controller;
 
 import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Service.PartyService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("api/party")
@@ -20,10 +26,14 @@ public class PartyController {
 
     //new Party
     @PostMapping
-    public ResponseEntity<Party> createParty(@RequestBody Party party) throws Exception {
-
-        Party createdParty = partyService.createParty(party);
-        return new ResponseEntity<>(createdParty, HttpStatus.CREATED);
+    public ResponseEntity<?> createParty(@RequestBody Party party, @AuthenticationPrincipal Jwt jwt ) throws Exception {
+        try{
+            Party createdParty = partyService.createParty(party, jwt);
+            return new ResponseEntity<>(createdParty, HttpStatus.CREATED);
+        }catch (Exception e){
+            log.info(String.valueOf(e));
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     //get Party by party Id
