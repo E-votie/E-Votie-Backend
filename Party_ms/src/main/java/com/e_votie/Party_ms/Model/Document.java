@@ -6,18 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+@Entity
+public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer addressId;
+    private Integer documentId;
+    private String documentUrl;
+    private String documentType;
+    private String documentUploadedDate;
 
-    private String addressLine_1;
-    private String addressLine_2;
-    private String city;
-    private String postalCode;
-
+    @ManyToOne
+    private Party party;
 }

@@ -1,0 +1,75 @@
+package com.e_votie.Party_ms.Service;
+
+import com.e_votie.Party_ms.Model.Document;
+import com.e_votie.Party_ms.Model.Party;
+import com.e_votie.Party_ms.Repository.DocumentRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.util.UUID;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+@Service
+public class DocumentService {
+
+    @Autowired
+    private FileMsClient fileMsClient;
+
+    @Autowired
+    private DocumentRepository documentRepository;
+
+    public Document createAndSaveDocument(MultipartFile file, Party party) {
+        try {
+            // Generate a unique file name including the original name
+            String originalFileName = file.getOriginalFilename();
+            String fileExtension = "";
+            String baseFileName = "";
+            if (originalFileName != null) {
+                int dotIndex = originalFileName.lastIndexOf(".");
+                if (dotIndex != -1) {
+                    fileExtension = originalFileName.substring(dotIndex);
+                    baseFileName = originalFileName.substring(0, dotIndex);
+                } else {
+                    baseFileName = originalFileName;
+                }
+            }
+            String uniqueFileName = baseFileName + "_" + UUID.randomUUID() + fileExtension;
+
+            // Rename the file (create a new MultipartFile with the updated name)
+            MultipartFile renamedFile = new MockMultipartFile(
+                    uniqueFileName,
+                    uniqueFileName,
+                    file.getContentType(),
+                    file.getInputStream()
+            );
+
+            // Upload the file using Feign client
+            ResponseEntity<String> response = fileMsClient.uploadFile(renamedFile);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String documentUrl = response.getBody();
+
+                // Create and populate the Document object
+                Document document = new Document();
+                document.setDocumentUrl(documentUrl);
+                document.setDocumentType(file.getContentType());
+                document.setDocumentUploadedDate(LocalDateTime.now().toString());
+                document.setParty(party);
+
+                // Save the Document and return it
+                return documentRepository.save(document);
+            } else {
+                throw new RuntimeException("Failed to upload file: " + file.getOriginalFilename());
+            }
+        } catch (Exception e) {
+            log.error("Error uploading file or saving document: ", e);
+            throw new RuntimeException("Document upload failed: " + file.getOriginalFilename(), e);
+        }
+    }
+
+}

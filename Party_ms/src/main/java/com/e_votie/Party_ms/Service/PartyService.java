@@ -1,14 +1,22 @@
 package com.e_votie.Party_ms.Service;
 
+import com.e_votie.Party_ms.Model.Address;
+import com.e_votie.Party_ms.Model.Document;
 import com.e_votie.Party_ms.Model.Party;
+import com.e_votie.Party_ms.Repository.AddressRepository;
+import com.e_votie.Party_ms.Repository.DocumentRepository;
 import com.e_votie.Party_ms.Repository.PartyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -17,11 +25,47 @@ public class PartyService {
     @Autowired
     private PartyRepository partyRepository;
 
-    // Method to create a new Party
-    public Party createParty(Party party, Jwt jwt) {
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private DocumentRepository documentRepository;
+
+    @Autowired
+    private FileMsClient fileMsClient;
+
+    @Autowired
+    private DocumentService documentService;
+
+    public Party createParty(Party party, List<MultipartFile> files, Jwt jwt) {
         String userId = jwt.getClaimAsString("sub");
-        log.info(userId);
-        return partyRepository.save(party);
+        party.setSecretaryId(userId);
+
+        // Save address if present
+        if (party.getAddress() != null) {
+            Address savedAddress = addressRepository.save(party.getAddress());
+            party.setAddress(savedAddress);
+        }
+
+        // Save the party first to establish the relationship with documents
+        Party savedParty = partyRepository.save(party);
+
+        // Upload files and create Document objects linked to the Party
+        if (files != null && !files.isEmpty()) {
+            List<Document> documents = files.stream()
+                    .map(file -> documentService.createAndSaveDocument(file, savedParty))
+                    .collect(Collectors.toList());
+
+//            // Modify the collection in place to avoid replacing it
+//            List<Document> currentDocuments = savedParty.getDocuments();
+//            currentDocuments.clear(); // Clear current documents
+//            currentDocuments.addAll(documents); // Add new documents
+//            // Set documents to the party
+//            savedParty.setDocuments(documents);
+        }
+
+        // Save the updated Party with linked Documents
+        return partyRepository.save(savedParty);
     }
 
     // Method to retrieve a Party by its ID
@@ -40,31 +84,36 @@ public class PartyService {
     }
 
     // Method to update an existing Party
-    public Party updateParty(Party party) throws Exception {
-        // Retrieve the existing party from the repository
-        Optional<Party> existingPartyOptional = partyRepository.findById(party.getRegistrationId());
+    public Party updateParty(Party updatedParty) throws Exception {
+        Optional<Party> existingPartyOptional = partyRepository.findById(updatedParty.getRegistrationId());
 
-        // Check if the existing party is present
         if (existingPartyOptional.isPresent()) {
             Party existingParty = existingPartyOptional.get();
 
-            // Update the fields of the existing party with values from the provided party
-            // Update the fields of the existing party with values from the provided party
-            existingParty.setPartyName(party.getPartyName());
-            existingParty.setAbbreviation(party.getAbbreviation());
-            existingParty.setFoundedDate(party.getFoundedDate());
-            existingParty.setSymbol(party.getSymbol());
-            existingParty.setPartyColors(party.getPartyColors());
-            existingParty.setConstitution(party.getConstitution());
-            existingParty.setDeclaration(party.getDeclaration());
-            existingParty.setStatus(party.getStatus());
+            existingParty.setPartyName(updatedParty.getPartyName());
+            existingParty.setAbbreviation(updatedParty.getAbbreviation());
+            existingParty.setFoundedDate(updatedParty.getFoundedDate());
+            existingParty.setPartyColors(updatedParty.getPartyColors());
+            existingParty.setDistrictBasisSeats(updatedParty.getDistrictBasisSeats());
+            existingParty.setNationalBasisSeats(updatedParty.getNationalBasisSeats());
+            existingParty.setTotalSeats(updatedParty.getTotalSeats());
+            existingParty.setContactNumber(updatedParty.getContactNumber());
+            existingParty.setPartyWebsite(updatedParty.getPartyWebsite());
+            existingParty.setPartySymbol(updatedParty.getPartySymbol());
+            existingParty.setState(updatedParty.getState());
+            existingParty.setLeaderId(updatedParty.getLeaderId());
+            existingParty.setSecretaryId(updatedParty.getSecretaryId());
+
+
+            existingParty.setAddress(updatedParty.getAddress());
+
 
             // Save the updated party back to the repository and return it
             return partyRepository.save(existingParty);
 
         } else {
             // Throw an exception if the party with the given ID is not found
-            throw new Exception("Party with ID " + party.getRegistrationId() + " not found");
+            throw new Exception("Party with ID " + updatedParty.getRegistrationId() + " not found");
         }
     }
 
