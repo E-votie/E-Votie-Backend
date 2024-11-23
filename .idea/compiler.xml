@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="HyperledgerFabricClient_ms" />
         <module name="Email_ms" />
         <module name="Party_ms" />
         <module name="service-reg" />
@@ -17,10 +18,10 @@
         <module name="File_ms" />
         <module name="api_gateteway" />
         <module name="Inquiry_ms" />
+        <module name="Election_ms" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Election_ms" target="17" />
       <module name="FileManagement_MS" target="17" />
       <module name="party-service" target="17" />
     </bytecodeTargetLevel>
@@ -34,6 +35,7 @@
       <module name="FileManagement_MS" options="-parameters" />
       <module name="File_ms" options="-parameters" />
       <module name="Fingerprint_ms" options="-parameters" />
+      <module name="HyperledgerFabricClient_ms" options="-parameters" />
       <module name="Inquiry_ms" options="-parameters" />
       <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
