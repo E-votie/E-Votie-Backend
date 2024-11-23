@@ -10,6 +10,7 @@
         <module name="Email_ms" />
         <module name="Party_ms" />
         <module name="service-reg" />
+        <module name="EmployeeKeyManagement_ms" />
         <module name="Announcement_ms" />
         <module name="Registration_ms" />
         <module name="Fingerprint_ms" />
@@ -29,6 +30,7 @@
       <module name="Announcement_ms" options="-parameters" />
       <module name="Election_ms" options="-parameters" />
       <module name="Email_ms" options="-parameters" />
+      <module name="EmployeeKeyManagement_ms" options="-parameters" />
       <module name="FileManagement_MS" options="-parameters" />
       <module name="File_ms" options="-parameters" />
       <module name="Fingerprint_ms" options="-parameters" />
