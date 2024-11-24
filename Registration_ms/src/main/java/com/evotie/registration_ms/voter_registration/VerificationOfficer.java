@@ -46,4 +46,10 @@ public class VerificationOfficer {
     public ResponseEntity<?> verifyOTP(@RequestParam String OTP){
         return voterRegistrationService.verifyOTP(OTP);
     }
+
+    @GetMapping("/voter_details/{voterID}")
+    public ResponseEntity<?> getVoterDetailsPollingStationVerification(@PathVariable String voterID){
+        return voterRegistrationService.getVoterDetailsPollingStationVerification(voterID);
+    }
+
 }

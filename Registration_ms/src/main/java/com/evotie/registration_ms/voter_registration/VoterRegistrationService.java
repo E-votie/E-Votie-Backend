@@ -3,6 +3,7 @@ package com.evotie.registration_ms.voter_registration;
 import com.evotie.registration_ms.voter_registration.DTO.*;
 import com.evotie.registration_ms.voter_registration.data_entity.TempContactInfo;
 import com.evotie.registration_ms.voter_registration.data_entity.VoterRegistration;
+import com.evotie.registration_ms.voter_registration.external.Fingerprint;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -19,5 +20,6 @@ public interface VoterRegistrationService {
     ResponseEntity<?> grameniladariSignature(SignDTO sign);
     ResponseEntity<?> sentOTP(String nic);
     ResponseEntity<?> verifyOTP(String otp);
-    String AddVoter(String ID, byte[] BiometricTemplate);
+    String addFingerprint(Fingerprint fingerprint);
+    ResponseEntity<?> getVoterDetailsPollingStationVerification(String voterID);
 }
