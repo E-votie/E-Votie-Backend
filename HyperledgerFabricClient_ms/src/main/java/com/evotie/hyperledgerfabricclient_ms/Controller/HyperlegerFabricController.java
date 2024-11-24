@@ -16,12 +16,12 @@ public class HyperlegerFabricController {
     private Hyperlegerfabric_Service hyperlegerfabricService;
 
     @PostMapping("/createVoter")
-    public ResponseEntity<String> createVoter(String NIC, String Name, String voterID, byte[] BiometricTemplate) {
+    public ResponseEntity<String> createVoter(String NIC, String Name, String voterID, String BiometricTemplate) {
         return hyperlegerfabricService.createVoter(NIC, Name, voterID, BiometricTemplate);
     }
 
     @GetMapping("/getVoter")
-    public ResponseEntity<String> createVoter(@RequestParam String voterID) {
+    public ResponseEntity<?> createVoter(@RequestParam String voterID) {
         return hyperlegerfabricService.getVoter(voterID);
     }
 

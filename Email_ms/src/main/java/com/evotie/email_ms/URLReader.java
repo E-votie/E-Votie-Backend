@@ -1,5 +1,7 @@
 package com.evotie.email_ms;
 
+import com.evotie.email_ms.Model.Massage;
+
 import java.net.*;
 import java.io.*;
 

@@ -3,6 +3,7 @@ package com.evotie.registration_ms.voter_registration;
 import com.evotie.registration_ms.voter_registration.DTO.SignDTO;
 import com.evotie.registration_ms.voter_registration.DTO.VoterApplicationDTO;
 import com.evotie.registration_ms.voter_registration.DTO.VoterRegistrationListDTO;
+import com.evotie.registration_ms.voter_registration.Service.FileMsClient;
 import com.evotie.registration_ms.voter_registration.Service.S3Service;
 import com.evotie.registration_ms.voter_registration.Service.VoterService;
 import com.evotie.registration_ms.voter_registration.data_entity.Voter;
@@ -26,17 +27,16 @@ import java.util.Map;
 public class VoterController {
 
     private final VoterService voterService;
-    private final S3Service s3Service;
+    private final FileMsClient fileMsClient;
 
-    public VoterController(VoterService voterService, S3Service s3Service) {
+    public VoterController(VoterService voterService, FileMsClient fileMsClient) {
         this.voterService = voterService;
-        this.s3Service = s3Service;
+        this.fileMsClient = fileMsClient;
     }
 
     @GetMapping("/my_details")
     public ResponseEntity<?> getMyDetails(@AuthenticationPrincipal Jwt jwt){
-//        String NIC = jwt.getClaimAsString("preferred_username");
-        String NIC = "damitha";
+        String NIC = jwt.getClaimAsString("preferred_username");
         log.info("Token is"+String.valueOf(jwt));
         log.info(NIC);
         Voter voter = voterService.getMyDetails(NIC);
@@ -44,7 +44,7 @@ public class VoterController {
         if(voter != null){
             Map<String, Object> response = new HashMap<>();
             response.put("voter", voter);
-            response.put("profileImageUrl", s3Service.generatePresignedUrlServise(voter.getApplicationID() + "_Face.jpg"));
+            response.put("profileImageUrl", fileMsClient.getFileUrl(voter.getApplicationID() + "_Face.jpg"));
             response.put("Status", voterService.getRegistrationStatus(NIC));
             return new ResponseEntity<>(response, HttpStatus.OK);
         }else {
