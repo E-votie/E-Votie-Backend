@@ -1,6 +1,9 @@
 package com.e_votie.Party_ms.Model;
 
 import com.e_votie.Party_ms.DTO.Voter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +25,10 @@ public class Party {
 
     private String partyName;
     private String abbreviation;
-    private LocalDate foundedDate;
+    private String foundedDate;
+
+    @Column(columnDefinition = "TEXT")
+    private String partyLogo;
 
     @ElementCollection
     private List<String> partyColors = new ArrayList<>();
@@ -47,6 +53,7 @@ public class Party {
     private String state; //pending verification, verified, banned
 
     @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Document> documents = new ArrayList<>();
 
     private  String leaderId;
@@ -56,13 +63,4 @@ public class Party {
     @JoinColumn(name = "verificationOfficerId")
     private VerificationOfficer verificationOfficer;
 
-    public void addDocument(Document document) {
-        this.documents.add(document);
-        document.setParty(this);
-    }
-
-    public void removeDocument(Document document) {
-        this.documents.remove(document);
-        document.setParty(null);
-    }
 }

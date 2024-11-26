@@ -38,7 +38,11 @@ public class DocumentService {
                     baseFileName = originalFileName;
                 }
             }
+
             String uniqueFileName = baseFileName + "_" + UUID.randomUUID() + fileExtension;
+
+            // Split the base name by underscore (_)
+            String[] parts = baseFileName.split("_");
 
             // Rename the file (create a new MultipartFile with the updated name)
             MultipartFile renamedFile = new MockMultipartFile(
@@ -52,12 +56,13 @@ public class DocumentService {
             ResponseEntity<String> response = fileMsClient.uploadFile(renamedFile);
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                String documentUrl = response.getBody();
+                String documentUrl = fileMsClient.getFileUrl(uniqueFileName);
 
                 // Create and populate the Document object
                 Document document = new Document();
+                document.setDocumentName(uniqueFileName);
                 document.setDocumentUrl(documentUrl);
-                document.setDocumentType(file.getContentType());
+                document.setDocumentType(parts[1]);
                 document.setDocumentUploadedDate(LocalDateTime.now().toString());
                 document.setParty(party);
 
@@ -72,4 +77,16 @@ public class DocumentService {
         }
     }
 
+    public String getDocumentUrl(String fileName) {
+        try {
+            // Call the file management service client to get the URL for the file
+            String documentUrl = fileMsClient.getFileUrl(fileName);
+
+            // Return the retrieved URL
+            return documentUrl;
+        } catch (Exception e) {
+            log.error("Error retrieving document URL for file: " + fileName, e);
+            throw new RuntimeException("Failed to retrieve document URL for file: " + fileName, e);
+        }
+    }
 }

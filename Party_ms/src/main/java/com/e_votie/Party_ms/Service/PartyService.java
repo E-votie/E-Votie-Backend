@@ -3,6 +3,7 @@ package com.e_votie.Party_ms.Service;
 import com.e_votie.Party_ms.Model.Address;
 import com.e_votie.Party_ms.Model.Document;
 import com.e_votie.Party_ms.Model.Party;
+import com.e_votie.Party_ms.Model.PartyMember;
 import com.e_votie.Party_ms.Repository.AddressRepository;
 import com.e_votie.Party_ms.Repository.DocumentRepository;
 import com.e_votie.Party_ms.Repository.PartyRepository;
@@ -37,36 +38,75 @@ public class PartyService {
     @Autowired
     private DocumentService documentService;
 
-    public Party createParty(Party party, List<MultipartFile> files, Jwt jwt) {
-        String userId = jwt.getClaimAsString("sub");
+    @Autowired
+    private PartyMemberService partyMemberService;
+
+    public Party createParty(Party party, List<MultipartFile> files, Jwt jwt) throws Exception {
+        String userId = jwt.getClaimAsString("preferred_username");
         party.setSecretaryId(userId);
 
         // Save address if present
         if (party.getAddress() != null) {
-            Address savedAddress = addressRepository.save(party.getAddress());
-            party.setAddress(savedAddress);
+            try {
+                Address savedAddress = addressRepository.save(party.getAddress());
+                party.setAddress(savedAddress);
+            } catch (Exception e) {
+                System.err.println("Error saving address: " + e.getMessage());
+                throw new Exception("Error saving address: " + e.getMessage());
+            }
         }
 
         // Save the party first to establish the relationship with documents
-        Party savedParty = partyRepository.save(party);
+        Party savedParty = null;
+        try {
+            savedParty = partyRepository.save(party);
+        } catch (Exception e) {
+            System.err.println("Error saving party: " + e.getMessage());
+            throw new Exception("Error saving party: " + e.getMessage());
+        }
 
         // Upload files and create Document objects linked to the Party
         if (files != null && !files.isEmpty()) {
-            List<Document> documents = files.stream()
-                    .map(file -> documentService.createAndSaveDocument(file, savedParty))
-                    .collect(Collectors.toList());
+            try {
+                Party finalSavedParty = savedParty;
+                List<Document> documents = files.stream()
+                        .map(file -> documentService.createAndSaveDocument(file, finalSavedParty))
+                        .collect(Collectors.toList());
+            } catch (Exception e) {
+                System.err.println("Error uploading files: " + e.getMessage());
+                throw new Exception("Error uploading files: " + e.getMessage());
+            }
+        }
 
-//            // Modify the collection in place to avoid replacing it
-//            List<Document> currentDocuments = savedParty.getDocuments();
-//            currentDocuments.clear(); // Clear current documents
-//            currentDocuments.addAll(documents); // Add new documents
-//            // Set documents to the party
-//            savedParty.setDocuments(documents);
+        // add party secretary
+        try {
+            PartyMember createdPartyMember = partyMemberService.registerNewPartyMember(
+                    String.valueOf(savedParty.getRegistrationId()), userId, "Secretary"
+            );
+        } catch (Exception e) {
+            System.err.println("Error creating party member: " + e.getMessage());
+            throw new Exception("Error creating party member: " + e.getMessage());
+        }
+
+        // add party leader
+        try {
+            PartyMember createdPartyMember = partyMemberService.registerNewPartyMember(
+                    String.valueOf(savedParty.getRegistrationId()), party.getLeaderId(), "Leader"
+            );
+        } catch (Exception e) {
+            System.err.println("Error creating party member: " + e.getMessage());
+            throw new Exception("Error creating party member: " + e.getMessage());
         }
 
         // Save the updated Party with linked Documents
-        return partyRepository.save(savedParty);
+        try {
+            return partyRepository.save(savedParty);
+        } catch (Exception e) {
+            System.err.println("Error saving the updated party: " + e.getMessage());
+            throw new Exception("Error saving the updated party: " + e.getMessage());
+        }
     }
+
 
     // Method to retrieve a Party by its ID
     public Optional<Party> getPartyById(String partyId) {
@@ -126,4 +166,16 @@ public class PartyService {
         }
     }
 
+    //update party state
+    public Party updatePartyState(String partyId, String state) throws Exception {
+        Optional<Party> existingPartyOptional = partyRepository.findById(Integer.valueOf(partyId));
+
+        if(existingPartyOptional.isPresent()){
+            Party existingParty = existingPartyOptional.get();
+            existingParty.setState(state);
+            return partyRepository.save(existingParty);
+        }else {
+            throw new Exception("Party with ID " + partyId + " not found");
+        }
+    }
 }

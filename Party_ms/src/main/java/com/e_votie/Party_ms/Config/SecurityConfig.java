@@ -24,17 +24,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring SecurityFilterChain");
+
         http
-                .csrf().disable()
+                // Disable CSRF for stateless APIs
+                .csrf(csrf -> csrf.disable())
+
+                // Enable CORS
                 .cors(withDefaults())
+
+                // Authorization rules
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/party/**").permitAll()
-                        .requestMatchers("/api/voter/**").permitAll()
-                        .anyRequest().
-                        authenticated())
-                .oauth2ResourceServer((oauth2) -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthConverter)));
+                        .requestMatchers("/api/party/**").permitAll()  // Allow unauthenticated access to party APIs
+                        .requestMatchers("/api/voter/**").permitAll()  // Allow unauthenticated access to voter APIs
+                        .requestMatchers("/api/document/**").permitAll()  // Allow unauthenticated access to document APIs
+                        .anyRequest().authenticated()                 // Require authentication for all other requests
+                )
+
+                // OAuth2 Resource Server configuration
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter))
+                );
+
         log.info("Configuring SecurityFilterChain complete");
         return http.build();
     }

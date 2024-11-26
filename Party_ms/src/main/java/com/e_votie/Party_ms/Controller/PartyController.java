@@ -1,13 +1,10 @@
 package com.e_votie.Party_ms.Controller;
 
 import com.e_votie.Party_ms.Model.Party;
-import com.e_votie.Party_ms.Service.FileMsClient;
 import com.e_votie.Party_ms.Service.PartyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -89,6 +86,17 @@ public class PartyController {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    //update party state
+    @PutMapping("/state")
+    public ResponseEntity<?> updatePartyState(@RequestParam("party") String partyId, @RequestParam("state") String state){
+        try{
+            Party updatedParty = partyService.updatePartyState(partyId, state);
+            return new ResponseEntity<Party>(updatedParty, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
