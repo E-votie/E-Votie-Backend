@@ -20,8 +20,8 @@ public class VoterController {
     private VoterService voterService;
 
     //Endpoint to verify the presence of a give voter
-    @PostMapping("/verify/{nic}")
-    private ResponseEntity<?> verifyVoter(@PathVariable String nic, @RequestHeader String token){
+    @PostMapping("/verify")
+    private ResponseEntity<?> verifyVoter(@RequestHeader("Authorization") String token){
         try{
             ResponseEntity<?> voter = voterService.getMyDetails(token);
             return new ResponseEntity<>(voter, HttpStatus.OK);

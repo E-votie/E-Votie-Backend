@@ -19,7 +19,7 @@ import java.util.List;
 public class VerificationOfficer {
 
     @Id
-    private String verificationOfficerId; //save voter id
+    private String verificationOfficerId;
 
     @OneToMany(mappedBy = "verificationOfficer")
     private List<Party> parties;
