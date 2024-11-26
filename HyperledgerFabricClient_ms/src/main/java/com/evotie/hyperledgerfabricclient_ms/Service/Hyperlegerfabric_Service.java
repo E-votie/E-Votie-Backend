@@ -2,6 +2,7 @@ package com.evotie.hyperledgerfabricclient_ms.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class Hyperlegerfabric_Service {
 
@@ -19,23 +21,25 @@ public class Hyperlegerfabric_Service {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public ResponseEntity<String> createVoter(String NIC, String Name, String voterID, byte[] BiometricTemplate) {
+    public ResponseEntity<String> createVoter(String NIC, String Name, String voterID, String BiometricTemplate) {
         String url = hyperlegerFabricUrl + "/invoke/CreateVoter";
         ObjectNode inputNode = mapper.createObjectNode();
         inputNode.put("nic", NIC);
         inputNode.put("name", Name);
         inputNode.put("voterID", voterID);
         inputNode.put("biometricTemplate", BiometricTemplate);
+        log.info("Create Voter: " + inputNode.toString());
 
         return sendPostRequest(url, inputNode);
     }
 
-    public ResponseEntity<String> getVoter(String voterID) {
+    public ResponseEntity<?> getVoter(String voterID) {
         String url = hyperlegerFabricUrl + "/query/GetVoter";
         ObjectNode inputNode = mapper.createObjectNode();
         inputNode.put("voterID", voterID);
-
-        return sendPostRequest(url, inputNode);
+        ResponseEntity<?> response = sendPostRequest(url, inputNode);
+        log.info("Get Voter: " + response.getBody());
+        return response;
     }
 
     public ResponseEntity<String> assignVoterToElection(String voterID, String electionID, boolean eligibility, String pollingStation) {

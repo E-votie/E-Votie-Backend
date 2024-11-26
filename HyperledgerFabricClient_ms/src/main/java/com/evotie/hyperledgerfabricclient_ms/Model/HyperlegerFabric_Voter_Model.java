@@ -6,5 +6,5 @@ public class HyperlegerFabric_Voter_Model{
     private String NIC;
     private String Name;
     private String voterID;
-    private byte[] BiometricTemplate;
+    private String BiometricTemplate;
 }
