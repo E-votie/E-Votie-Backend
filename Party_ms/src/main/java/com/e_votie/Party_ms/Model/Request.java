@@ -4,20 +4,20 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.web3j.abi.datatypes.Int;
 
-@Data
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer addressId;
+    private Integer requestId;
 
-    private String addressLine_1;
-    private String addressLine_2;
-    private String city;
-    private String postalCode;
-
+    private String requestState; //pending, accepted
+    private String nic;
+    @ManyToOne
+    private Party party;
 }

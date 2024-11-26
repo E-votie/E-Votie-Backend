@@ -23,6 +23,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="FileManagement_MS" target="17" />
+      <module name="HyperledgerFabricClient_ms" target="1.5" />
       <module name="party-service" target="17" />
     </bytecodeTargetLevel>
   </component>

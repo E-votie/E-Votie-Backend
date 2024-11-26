@@ -6,18 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
-public class Address {
+@AllArgsConstructor
+@Entity
+public class Nominee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer addressId;
+    private Integer nomineeId;
+    private String partyMemberNIC;
+    private  Integer electionId;
 
-    private String addressLine_1;
-    private String addressLine_2;
-    private String city;
-    private String postalCode;
-
+    @ManyToOne
+    private Party party;
 }

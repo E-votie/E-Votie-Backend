@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Optional;
@@ -15,4 +16,7 @@ public interface VoterService {
 
     @GetMapping("/voter/my_details")
     public ResponseEntity<?> getMyDetails(@RequestHeader("Authorization") String token);
+
+    @GetMapping("/voter/{nic}")
+    public ResponseEntity<Voter> getVoter(@RequestHeader("Authorization") String token,@PathVariable String nic);
 }

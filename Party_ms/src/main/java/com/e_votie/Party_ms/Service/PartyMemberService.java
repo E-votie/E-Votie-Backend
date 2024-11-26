@@ -26,42 +26,37 @@ public class PartyMemberService {
     private VoterService voterService;
 
     //Method to register a new party member
-    public PartyMember registerNewPartyMember(String partyId, PartyMember partyMember) throws Exception {
+    public PartyMember registerNewPartyMember(String partyId, String voterId, String role) throws Exception {
         Optional<Party> partyOptional = partyRepository.findById(Integer.valueOf(partyId));
 
         if (partyOptional.isPresent()) {
-            partyMember.setParty(partyOptional.get());
-            return partyMemberRepository.save(partyMember);
+            PartyMember newPartyMember = new PartyMember();
+            newPartyMember.setPartyMemberId(voterId);
+            newPartyMember.setNIC(voterId);
+            newPartyMember.setRole(role);
+            newPartyMember.setParty(partyOptional.get());
+
+            return partyMemberRepository.save(newPartyMember);
         } else {
             throw new Exception("Party with ID " + partyId + " not found");
         }
     }
 
-    //Method to retrieve party members of a given party
-//    public List<PartyMember> getPartyMembersByPartyId(String partyId) throws Exception {
-//        Optional<Party> partyOptional = partyRepository.findById(Integer.valueOf(partyId));
-//
-//        if (partyOptional.isPresent()) {
-//            return partyMemberRepository.findAllByRegistrationId(Integer.valueOf(partyId));
-//        } else {
-//            throw new Exception("Party with ID " + partyId + " not found");
-//        }
-//    }
-
-    //Method to search party members by from a given member name
-//    public List<PartyMember> getPartyMemberByMemberName(String memberName) {
-//        return partyMemberRepository.findByFullNameContaining(memberName);
-//    }
-
-    //Method to retrieve party member using given nic
-    public PartyMember getPartyMemberByNIC(String nic) throws Exception {
+    //Method to retrieve logged party member using given nic
+    public PartyMember getPartyMemberByToken(Jwt jwt) throws Exception {
+        String nic = jwt.getClaimAsString("preferred_username");
         return partyMemberRepository.findByNIC(nic)
                 .orElseThrow(() -> new Exception("Party Member not found"));
     }
 
+    //Method to retrieve party member using given nic
+    public PartyMember getPartyMemberByNIC(String nic) throws Exception {
+        return partyMemberRepository.findByNIC(nic)
+                .orElseThrow(() -> new Exception("Party Member not found"));    }
+
     //Method to update the party member
-    public PartyMember updatePartyMember(String nic, PartyMember updatedPartyMember) throws Exception {
-        PartyMember existMember = getPartyMemberByNIC(nic);
+    public PartyMember updatePartyMember(Jwt jwt, PartyMember updatedPartyMember) throws Exception {
+        PartyMember existMember = getPartyMemberByToken(jwt);
 
         // Update the existing member's details
 //        existMember.setFirstName(updatedPartyMember.getFirstName());
@@ -90,9 +85,8 @@ public class PartyMemberService {
     }
 
     //Method to delete a party member
-    public void deletePartyMember(String nic) throws Exception {
-        partyMemberRepository.delete(getPartyMemberByNIC(nic));
+    public void deletePartyMember(Jwt jwt) throws Exception {
+        partyMemberRepository.delete(getPartyMemberByToken(jwt));
     }
-
 
 }

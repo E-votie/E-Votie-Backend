@@ -18,6 +18,7 @@ import java.util.Date;
 @Slf4j
 @RestController
 @RequestMapping("/api/files")
+@CrossOrigin(origins = "http://localhost:5173")
 public class FileController {
     @Autowired
     private S3Service s3Service;
@@ -27,6 +28,7 @@ public class FileController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        log.info("file ms controller reached");
         log.info("Uploading file {} {}", file.getOriginalFilename(), file.getName());
         return ResponseEntity.ok(s3Service.uploadFile(file));
     }

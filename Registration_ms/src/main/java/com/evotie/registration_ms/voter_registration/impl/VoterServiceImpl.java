@@ -27,4 +27,9 @@ public class VoterServiceImpl implements VoterService {
     public String getRegistrationStatus(String NIC) {
         return voterRegistrationRepo.findByNIC(NIC).getStatus();
     }
+
+    @Override
+    public Voter getVoter(String nic) {
+        return voterRepo.findByNIC(nic);
+    }
 }

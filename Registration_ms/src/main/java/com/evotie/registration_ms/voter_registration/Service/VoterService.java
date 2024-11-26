@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 public interface VoterService {
     Voter getMyDetails(String NIC);
     String getRegistrationStatus(String NIC);
+    Voter getVoter(String nic);
 }
