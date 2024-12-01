@@ -45,16 +45,16 @@ public class PartyService {
         String userId = jwt.getClaimAsString("preferred_username");
         party.setSecretaryId(userId);
 
-        // Save address if present
-        if (party.getAddress() != null) {
-            try {
-                Address savedAddress = addressRepository.save(party.getAddress());
-                party.setAddress(savedAddress);
-            } catch (Exception e) {
-                System.err.println("Error saving address: " + e.getMessage());
-                throw new Exception("Error saving address: " + e.getMessage());
-            }
-        }
+//        // Save address if present
+//        if (party.getAddress() != null) {
+//            try {
+//                Address savedAddress = addressRepository.save(party.getAddress());
+//                party.setAddress(savedAddress);
+//            } catch (Exception e) {
+//                System.err.println("Error saving address: " + e.getMessage());
+//                throw new Exception("Error saving address: " + e.getMessage());
+//            }
+//        }
 
         // Save the party first to establish the relationship with documents
         Party savedParty = null;
@@ -124,8 +124,8 @@ public class PartyService {
     }
 
     // Method to update an existing Party
-    public Party updateParty(Party updatedParty) throws Exception {
-        Optional<Party> existingPartyOptional = partyRepository.findById(updatedParty.getRegistrationId());
+    public Party updateParty(String partyId, Party updatedParty, List<MultipartFile> files, Jwt jwt ) throws Exception {
+        Optional<Party> existingPartyOptional = partyRepository.findById(Integer.valueOf(partyId));
 
         if (existingPartyOptional.isPresent()) {
             Party existingParty = existingPartyOptional.get();
@@ -133,23 +133,34 @@ public class PartyService {
             existingParty.setPartyName(updatedParty.getPartyName());
             existingParty.setAbbreviation(updatedParty.getAbbreviation());
             existingParty.setFoundedDate(updatedParty.getFoundedDate());
-            existingParty.setPartyColors(updatedParty.getPartyColors());
             existingParty.setDistrictBasisSeats(updatedParty.getDistrictBasisSeats());
             existingParty.setNationalBasisSeats(updatedParty.getNationalBasisSeats());
             existingParty.setTotalSeats(updatedParty.getTotalSeats());
             existingParty.setContactNumber(updatedParty.getContactNumber());
             existingParty.setPartyWebsite(updatedParty.getPartyWebsite());
             existingParty.setPartySymbol(updatedParty.getPartySymbol());
-            existingParty.setState(updatedParty.getState());
-            existingParty.setLeaderId(updatedParty.getLeaderId());
-            existingParty.setSecretaryId(updatedParty.getSecretaryId());
-
-
             existingParty.setAddress(updatedParty.getAddress());
 
+            Party savedParty = partyRepository.save(existingParty);
 
+            //update logo
+            if (files != null && !files.isEmpty()) {
+                try {
+                    //delete existing document
+                    documentService.deleteDocument(savedParty, "logo");
+
+                    //save new logo
+                    Party finalSavedParty = savedParty;
+                    List<Document> documents = files.stream()
+                            .map(file -> documentService.createAndSaveDocument(file, finalSavedParty))
+                            .collect(Collectors.toList());
+                } catch (Exception e) {
+                    System.err.println("Error uploading files: " + e.getMessage());
+                    throw new Exception("Error uploading files: " + e.getMessage());
+                }
+            }
             // Save the updated party back to the repository and return it
-            return partyRepository.save(existingParty);
+            return savedParty;
 
         } else {
             // Throw an exception if the party with the given ID is not found

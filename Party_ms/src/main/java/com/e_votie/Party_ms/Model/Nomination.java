@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Nominee {
+@IdClass(NominationId.class)
+public class Nomination {
+    @Id
+    private Integer partyRegistrationId;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer nomineeId;
-    private String partyMemberNIC;
-    private  Integer electionId;
+    private Integer electionId;
 
-    @ManyToOne
-    private Party party;
+    private String partyMemberNIC;
+
 }
+

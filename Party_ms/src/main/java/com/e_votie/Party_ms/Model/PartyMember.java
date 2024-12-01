@@ -1,12 +1,11 @@
 package com.e_votie.Party_ms.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@PrimaryKeyJoinColumn(name = "VoterID")
 public class PartyMember{
 
     @Id
@@ -23,6 +21,10 @@ public class PartyMember{
 
     private String NIC;
     private String role; //leader, secretory, MP,
+
+    private String partyMemberName;
+    private String partyMemberDescription;
+    private String profilePicture;
 
     @OneToMany(mappedBy = "partyMember")
     private List<Manifesto> manifestos = new ArrayList<>();
