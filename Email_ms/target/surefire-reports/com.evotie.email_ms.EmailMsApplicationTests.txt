@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.evotie.email_ms.EmailMsApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 59.34 s -- in com.evotie.email_ms.EmailMsApplicationTests

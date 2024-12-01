@@ -1,0 +1,5 @@
+com\evotie\hyperledgerfabricclient_ms\Controller\HyperlegerFabricController.class
+com\evotie\hyperledgerfabricclient_ms\Model\HyperlegerFabric_Voter_Model.class
+com\evotie\hyperledgerfabricclient_ms\Service\Hyperlegerfabric_Service.class
+com\evotie\hyperledgerfabricclient_ms\Config\CorsConfig.class
+com\evotie\hyperledgerfabricclient_ms\HyperledgerFabricClientMsApplication.class

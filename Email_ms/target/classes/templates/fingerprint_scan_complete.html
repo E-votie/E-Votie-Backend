@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fingerprint Registration Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999999;
+            text-align: center;
+        }
+        .highlight {
+            font-size: 18px;
+            font-weight: bold;
+            color: #EC4899;
+        }
+        .details {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        .details p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://via.placeholder.com/100x50?text=E-votie" alt="E-votie Logo" class="logo">
+    </div>
+    <div class="content">
+        <h1>Fingerprint Registration Successful</h1>
+        <p>Dear <span class="highlight" th:text="${name}">John Doe</span>,</p>
+        <p>Your fingerprint has been successfully registered in our system.</p>
+        <div class="details">
+            <p><strong>Name:</strong> <span th:text="${name}">John Doe</span></p>
+            <p><strong>NIC:</strong> <span th:text="${nic}">123456789V</span></p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 E-votie. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
