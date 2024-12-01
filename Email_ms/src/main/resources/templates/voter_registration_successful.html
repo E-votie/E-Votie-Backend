@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration Completed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .details {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+        .details p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .highlight {
+            font-size: 18px;
+            font-weight: bold;
+            color: #EC4899;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="https://via.placeholder.com/100x50?text=E-votie" alt="E-votie Logo" class="logo">
+    </div>
+    <div class="content">
+        <h1>Voter Registration Completed</h1>
+        <p>Dear <span class="highlight" th:text="${name}">John Doe</span>,</p>
+        <p>Your voter registration has been successfully completed. Below are your login details:</p>
+        <div class="details">
+            <p><strong>Username:</strong> <span th:text="${nic}">123456789V</span></p>
+            <p><strong>Password:</strong> <span th:text="${pwd}">your_password_here</span></p>
+        </div>
+        <p>For your security, please change your password upon logging in.</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 E-votie. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
