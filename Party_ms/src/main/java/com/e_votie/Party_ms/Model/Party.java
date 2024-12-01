@@ -37,7 +37,8 @@ public class Party {
     private Integer nationalBasisSeats;
     private Integer totalSeats;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL) // Enables persistence of the Address when Party is persisted
+    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
     private Address address;
 
     private String contactNumber;

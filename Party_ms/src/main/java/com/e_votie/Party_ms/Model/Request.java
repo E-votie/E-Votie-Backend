@@ -15,9 +15,11 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer requestId;
-
+    private String receiverNIC;
+    private String receiverName;
     private String requestState; //pending, accepted
-    private String nic;
+    private String requestInitiatorNIC;
+    private String createdAt;
     @ManyToOne
     private Party party;
 }

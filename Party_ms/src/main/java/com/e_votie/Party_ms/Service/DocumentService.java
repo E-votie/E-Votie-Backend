@@ -3,15 +3,16 @@ package com.e_votie.Party_ms.Service;
 import com.e_votie.Party_ms.Model.Document;
 import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Repository.DocumentRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.UUID;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -74,6 +75,17 @@ public class DocumentService {
         } catch (Exception e) {
             log.error("Error uploading file or saving document: ", e);
             throw new RuntimeException("Document upload failed: " + file.getOriginalFilename(), e);
+        }
+    }
+
+    @Transactional
+    public void deleteDocument(Party party, String fileType) {
+        try{
+            // Delete existing documents with the same party and document type
+            documentRepository.deleteByPartyAndDocumentType(party.getRegistrationId(), fileType);
+        } catch (Exception e) {
+            log.error("Error deleting document for party: " + fileType  + party.getRegistrationId(), e);
+            throw new RuntimeException("Document deletion failed for party: " + fileType + party.getRegistrationId(), e);
         }
     }
 

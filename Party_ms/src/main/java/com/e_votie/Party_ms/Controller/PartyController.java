@@ -69,12 +69,27 @@ public class PartyController {
         return new ResponseEntity<>(allParties, HttpStatus.OK);
     }
 
+    //update a party
+    @PutMapping("/{partyId}")
+    public ResponseEntity<?> updateParty(
+            @PathVariable String partyId,
+            @RequestPart("party") String partyJson,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @AuthenticationPrincipal Jwt jwt) {
+        try {
+            // Deserialize JSON to Party object
+            ObjectMapper objectMapper = new ObjectMapper();
+            Party party = objectMapper.readValue(partyJson, Party.class);
 
-    //update Party
-    @PutMapping
-    public ResponseEntity<Party> updateParty(@RequestBody Party party) throws Exception {
-        Party updatedParty = partyService.updateParty(party);
-        return new ResponseEntity<>(updatedParty ,HttpStatus.OK);
+            // Create the Party and handle file uploads
+            Party updatedParty = partyService.updateParty(partyId, party, files, jwt);
+
+            // Return the created Party as the response
+            return new ResponseEntity<>(updatedParty, HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.error("Error creating party: ", e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 

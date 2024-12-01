@@ -1,9 +1,6 @@
 package com.e_votie.Party_ms.Model;
 
-import com.e_votie.Party_ms.Config.LobFieldSerializer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
