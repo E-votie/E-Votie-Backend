@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -100,5 +101,50 @@ public class DocumentService {
             log.error("Error retrieving document URL for file: " + fileName, e);
             throw new RuntimeException("Failed to retrieve document URL for file: " + fileName, e);
         }
+    }
+
+    String uploadProfilePicture(List<MultipartFile> files) throws Exception {
+        if (files == null || files.isEmpty()) {
+            return "";
+        }
+
+        try {
+            MultipartFile profilePicture = files.get(0);
+            String originalFileName = profilePicture.getOriginalFilename();
+            String uniqueFileName = generateUniqueFileName(originalFileName);
+
+            // Rename and upload the file
+            MultipartFile renamedFile = new MockMultipartFile(
+                    uniqueFileName,
+                    uniqueFileName,
+                    profilePicture.getContentType(),
+                    profilePicture.getInputStream()
+            );
+
+            ResponseEntity<String> response = fileMsClient.uploadFile(renamedFile);
+
+            return response.getStatusCode().is2xxSuccessful()
+                    ? uniqueFileName
+                    : "";
+        } catch (Exception e) {
+            log.error("Error uploading profile picture: {}", e.getMessage());
+            throw new Exception("Error uploading profile picture: " + e.getMessage());
+        }
+    }
+
+    private String generateUniqueFileName(String originalFileName) {
+        if (originalFileName == null) {
+            return UUID.randomUUID().toString();
+        }
+
+        int dotIndex = originalFileName.lastIndexOf(".");
+        String baseFileName = dotIndex != -1
+                ? originalFileName.substring(0, dotIndex)
+                : originalFileName;
+        String fileExtension = dotIndex != -1
+                ? originalFileName.substring(dotIndex)
+                : "";
+
+        return baseFileName + "_" + UUID.randomUUID() + fileExtension;
     }
 }

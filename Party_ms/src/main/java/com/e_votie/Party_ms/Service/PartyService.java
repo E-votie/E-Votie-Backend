@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -45,16 +46,11 @@ public class PartyService {
         String userId = jwt.getClaimAsString("preferred_username");
         party.setSecretaryId(userId);
 
-//        // Save address if present
-//        if (party.getAddress() != null) {
-//            try {
-//                Address savedAddress = addressRepository.save(party.getAddress());
-//                party.setAddress(savedAddress);
-//            } catch (Exception e) {
-//                System.err.println("Error saving address: " + e.getMessage());
-//                throw new Exception("Error saving address: " + e.getMessage());
-//            }
-//        }
+        // Check if a party already exists with the given secretaryId
+        Optional<Party> existingPartyOptional = Optional.ofNullable(partyRepository.findBySecretaryId(userId));
+        if (existingPartyOptional.isPresent()) {
+            throw new Exception("A party already exists with this secretary.");
+        }
 
         // Save the party first to establish the relationship with documents
         Party savedParty = null;

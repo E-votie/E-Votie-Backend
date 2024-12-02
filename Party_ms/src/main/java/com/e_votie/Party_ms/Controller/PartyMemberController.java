@@ -1,6 +1,5 @@
 package com.e_votie.Party_ms.Controller;
 
-import com.e_votie.Party_ms.DTO.Voter;
 import com.e_votie.Party_ms.Model.PartyMember;
 import com.e_votie.Party_ms.Service.PartyMemberService;
 import com.e_votie.Party_ms.Service.VoterService;
@@ -11,9 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -53,6 +49,16 @@ public class PartyMemberController {
     public ResponseEntity<PartyMember> getPartyMemberByNIC(@PathVariable("nic") String nic) {
         try{
             return new ResponseEntity<>(partyMemberService.getPartyMemberByNIC(nic), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //Endpoint to get all party members of a party by party id
+    @GetMapping("/all")
+    public ResponseEntity<?> getPartyMembersByPartyId(@RequestParam("party") String partyId) {
+        try{
+            return new ResponseEntity<>(partyMemberService.getPartyMembersByPartyId(partyId), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
