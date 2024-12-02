@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface PartyMemberRepository extends JpaRepository<PartyMember, String> {
     
     Optional<PartyMember> findByNIC(String nic);
+
+//    Party findByParty(String partyId);
 //    Optional<PartyMember> findByVoterID(String voterId);
 
-//    List<PartyMember> findByParty(Party party);
+    List<PartyMember> findByParty(Party party);
 }

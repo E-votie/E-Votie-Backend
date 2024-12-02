@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Integer> {
     Optional<Party> findByPartyName(String partyName);
+
+    Party findBySecretaryId(String userId);
 }

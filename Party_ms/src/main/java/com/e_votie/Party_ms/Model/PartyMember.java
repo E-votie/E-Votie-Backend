@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,7 @@ public class PartyMember{
 
     private String partyMemberName;
     private String partyMemberDescription;
+    @Column(columnDefinition = "TEXT")
     private String profilePicture;
 
     @OneToMany(mappedBy = "partyMember")

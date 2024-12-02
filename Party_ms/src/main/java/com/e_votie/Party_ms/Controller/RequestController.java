@@ -1,14 +1,19 @@
 package com.e_votie.Party_ms.Controller;
 
+import com.e_votie.Party_ms.Model.Party;
+import com.e_votie.Party_ms.Model.PartyMember;
 import com.e_votie.Party_ms.Model.Request;
 import com.e_votie.Party_ms.Service.RequestService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -75,7 +80,6 @@ public class RequestController {
         }
     }
 
-
     //update the staus of a given request
     @PutMapping("/status/{requestId}")
     public ResponseEntity<?> updateRequestStatus(
@@ -90,4 +94,56 @@ public class RequestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    //delete a specific request by requestId
+    @DeleteMapping("/{requestId}")
+    public ResponseEntity<?> deleteRequestById(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable Integer requestId
+    ) {
+        try {
+            requestService.deleteRequestById(jwt, requestId);
+            return ResponseEntity.ok("Request deleted successfully.");
+        } catch (Exception e) {
+            log.error("Error deleting request", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    //delete all requests by partyRegistrationId
+    @DeleteMapping("/party/{partyRegistrationId}")
+    public ResponseEntity<?> deleteRequestsByPartyId(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable Integer partyRegistrationId
+    ) {
+        try {
+            requestService.deleteRequestsByPartyId(jwt, partyRegistrationId);
+            return ResponseEntity.ok("All requests for the party deleted successfully.");
+        } catch (Exception e) {
+            log.error("Error deleting requests by party ID", e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    //accept request
+    @PostMapping("/accept/{requestId}")
+    public ResponseEntity<?> acceptRequest(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable String requestId,
+            @RequestPart("party") String partyMemberJson,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+            ){
+        try{
+            // Deserialize JSON to Party object
+            ObjectMapper objectMapper = new ObjectMapper();
+            PartyMember partyMember = objectMapper.readValue(partyMemberJson, PartyMember.class);
+            return requestService.acceptRequest(jwt, requestId, partyMember, files);
+        }catch (Exception e){
+            log.error("Error accepting party request");
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    //leave/remove from party
+
 }

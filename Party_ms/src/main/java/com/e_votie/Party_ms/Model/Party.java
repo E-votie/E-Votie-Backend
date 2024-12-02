@@ -58,6 +58,8 @@ public class Party {
     private List<Document> documents = new ArrayList<>();
 
     private  String leaderId;
+    private String leaderName;
+    private String secretoryName;
     private String secretaryId;
 
     @ManyToOne
