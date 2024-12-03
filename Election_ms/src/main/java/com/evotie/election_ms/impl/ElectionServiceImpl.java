@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,6 +34,11 @@ public class ElectionServiceImpl implements ElectionService {
         this.electionRepo = electionRepo;
         this.locationRepo = locationRepo;
         this.candidateRepo = candidateRepo;
+    }
+
+    @Override
+    public ResponseEntity<?> addNewCandidate(Jwt jwt) {
+        return null;
     }
 
     @Override
@@ -151,6 +157,11 @@ public class ElectionServiceImpl implements ElectionService {
         election.setContractAddress(contractAddress);
         Election updatedElection = electionRepo.save(election);
         return ResponseEntity.ok().body(new ResponseDTO("Contract deployed successfully", "200", updatedElection));
+    }
+
+    @Override
+    public List<Election> getAllElections() {
+        return electionRepo.findAll();
     }
 
     private String publishContract(LocalDateTime electionDayStartDate, LocalDateTime electionDayEndDate, List<Integer> candidateIds) {

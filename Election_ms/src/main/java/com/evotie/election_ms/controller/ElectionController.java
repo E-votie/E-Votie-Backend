@@ -5,6 +5,7 @@ import com.evotie.election_ms.dto.PollingStationRequest;
 import com.evotie.election_ms.model.Election;
 import com.evotie.election_ms.model.Location;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,10 +20,12 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/election")
 @Validated
 public class ElectionController {
 
+    @Autowired
     private final ElectionService electionService;
 
     public ElectionController(ElectionService electionService) {
@@ -69,5 +72,24 @@ public class ElectionController {
     @GetMapping("deploy_cantract/{electionId}")
     public ResponseEntity<?> deployContract(@PathVariable Long electionId){
         return electionService.deployContract(electionId);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllElections(@AuthenticationPrincipal Jwt jwt){
+        try{
+            return new ResponseEntity<List<Election>>(electionService.getAllElections(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //add new candidate
+    @PostMapping("/new/candidate")
+    public ResponseEntity<?> addNewCandidate(@AuthenticationPrincipal Jwt jwt){
+        try{
+            return new ResponseEntity<>(electionService.addNewCandidate(jwt), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
