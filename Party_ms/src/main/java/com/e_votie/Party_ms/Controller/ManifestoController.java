@@ -14,19 +14,20 @@ import java.util.Optional;
 @RequestMapping("/api/manifesto")
 public class ManifestoController {
 
-//    @Autowired
-//    private ManifestoService manifestoService;
-//
-//    // Endpoint to create a new Manifesto
-//    @PostMapping("/member")
-//    public ResponseEntity<Manifesto> createManifesto(@RequestParam String nic,@RequestBody Manifesto manifesto) {
-//        try{
-//            Manifesto createdManifesto = manifestoService.createManifesto(nic, manifesto);
-//            return ResponseEntity.ok(createdManifesto);
-//        }catch (Exception e){
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+   @Autowired
+   private ManifestoService manifestoService;
+
+
+   // Endpoint to create a new Manifesto
+   @PostMapping("/member")
+   public ResponseEntity<Manifesto> createManifesto(@RequestParam String nic,@RequestBody Manifesto manifesto) {
+       try{
+           Manifesto createdManifesto = manifestoService.createManifesto(nic, manifesto);
+           return ResponseEntity.ok(createdManifesto);
+       }catch (Exception e){
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
+   }
 //
 //    // Endpoint to retrieve a Manifesto by its ID
 //    @GetMapping("/{id}")

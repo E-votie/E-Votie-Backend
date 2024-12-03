@@ -7,11 +7,27 @@ import com.e_votie.Party_ms.Repository.PartyMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Service
 public class ManifestoService {
+
+    @Autowired
+    private ManifestoRepository manifestoRepository;
+
+    @Autowired
+    private PartyMemberRepository partyMemberRepository;
+
+    //thamara
+    // public Manifesto createManifesto(String partyMemberId, Manifesto manifesto) {
+    //     PartyMember partyMember = partyMemberRepository.findById(partyMemberId)
+    //             .orElseThrow(() -> new IllegalArgumentException("PartyMember not found with ID: " + partyMemberId));
+
+    //     manifesto.setPartyMember(partyMember);
+    //     manifesto.setCreatedDate(LocalDate.now());
+    //     return manifestoRepository.save(manifesto);
+    // }
 
 //    @Autowired
 //    private ManifestoRepository manifestoRepository;
@@ -19,26 +35,26 @@ public class ManifestoService {
 //    @Autowired
 //    private PartyMemberRepository partyMemberRepository;
 //
-//    // Method to create a new Manifesto
-//    public Manifesto createManifesto(String nic, Manifesto manifesto) throws Exception {
-//
-//        Optional<PartyMember> partyMemberOptional = partyMemberRepository.findByNIC(nic);
-//
-//        if(partyMemberOptional.isPresent()) {
-//            PartyMember partyMember = partyMemberOptional.get();
-//
-//            manifesto.setPartyMember(partyMember);
-//            Manifesto savedManifesto = manifestoRepository.save(manifesto);
-//
-//            partyMember.setManifesto(manifesto);
-//            partyMemberRepository.save(partyMember);
-//
-//            return savedManifesto;
-//        }else {
-//            throw new Exception("Party Member with NIC " + manifesto.getPartyMember().getNIC() + " not found");
-//        }
-//
-//    }
+   // Method to create a new Manifesto
+   public Manifesto createManifesto(String nic, Manifesto manifesto) throws Exception {
+
+       Optional<PartyMember> partyMemberOptional = partyMemberRepository.findByNIC(nic);
+
+       if(partyMemberOptional.isPresent()) {
+           PartyMember partyMember = partyMemberOptional.get();
+
+           manifesto.setPartyMember(partyMember);
+           Manifesto savedManifesto = manifestoRepository.save(manifesto);
+
+           partyMember.getManifestos().add(savedManifesto);
+           partyMemberRepository.save(partyMember);
+
+           return savedManifesto;
+       }else {
+           throw new Exception("Party Member with NIC " + manifesto.getPartyMember().getNIC() + " not found");
+       }
+
+   }
 //
 //    // Method to retrieve a Manifesto by its ID
 //    public Optional<Manifesto> getManifestoById(Integer manifestoId) {
