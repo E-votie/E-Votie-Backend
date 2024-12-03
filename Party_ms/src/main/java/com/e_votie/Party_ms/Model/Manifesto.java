@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -21,11 +23,13 @@ public class Manifesto {
     private Integer manifestoId;
 
     private String manifestoName;
+    private String election;
     private LocalDate createdDate;
     private Float progress; // Store progress as a percentage
 
     @ManyToOne
     @JoinColumn(name = "partyMemberId", nullable = false)
+    @JsonIgnoreProperties("manifestos") // Ignore the 'manifestos' field in PartyMember during serialization
     private PartyMember partyMember;
 
     @OneToMany
