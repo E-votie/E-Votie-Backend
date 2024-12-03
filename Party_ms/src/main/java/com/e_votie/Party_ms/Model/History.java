@@ -19,7 +19,8 @@ public class History {
     private int historyId;
     private String oldValue;
     private String newValue;
-    private LocalDateTime dateTime;
+    private String dateTime;
+    private String changedField;
 
     @ManyToOne
     private Party party;

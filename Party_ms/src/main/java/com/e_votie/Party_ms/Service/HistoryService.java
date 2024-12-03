@@ -1,11 +1,13 @@
 package com.e_votie.Party_ms.Service;
 
 import com.e_votie.Party_ms.Model.History;
+import com.e_votie.Party_ms.Model.Party;
 import com.e_votie.Party_ms.Repository.HistoryRepository;
 import com.e_votie.Party_ms.Repository.PartyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +48,27 @@ public class HistoryService {
     // Delete
     public void deleteHistory(int id) {
         historyRepository.deleteById(id);
+    }
+
+    //add new entry
+    public void addNewHistoryEntry(Party party, String previousValue, String newValue, String changedField){
+        History newEntry = new History();
+        newEntry.setOldValue(previousValue);
+        newEntry.setNewValue(newValue);
+        newEntry.setChangedField(changedField);
+        newEntry.setDateTime(String.valueOf(LocalDateTime.now()));
+        newEntry.setParty(party);
+
+        historyRepository.save(newEntry);
+    }
+
+    public List<History> getHistoryByPartyId(int partyId) {
+        Optional<Party> existingPartyOptional = partyRepository.findById(partyId);
+        if(existingPartyOptional.isPresent()){
+            Party existingParty = existingPartyOptional.get();
+            return historyRepository.findByParty(existingParty);
+        }else{
+            throw new Error("Party not found");
+        }
     }
 }

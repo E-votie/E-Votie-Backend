@@ -50,6 +50,18 @@ public class HistoryController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    // Read By Party ID
+    @GetMapping("/party/{partyId}")
+    public ResponseEntity<?> getHistoryByPartyId(@PathVariable int partyId) {
+        try{
+            List<History> history = historyService.getHistoryByPartyId(partyId);
+            return new ResponseEntity<>(history, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+    }
+
     // Update
     @PutMapping("/{id}")
     public ResponseEntity<History> updateHistory(@PathVariable int id, @RequestBody History updatedHistory) {
