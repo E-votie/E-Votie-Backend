@@ -17,6 +17,7 @@
         <module name="File_ms" />
         <module name="api_gateteway" />
         <module name="Inquiry_ms" />
+        <module name="officeportal" />
         <module name="Election_ms" />
       </profile>
     </annotationProcessing>
@@ -38,6 +39,7 @@
       <module name="Party_ms" options="-parameters" />
       <module name="Registration_ms" options="-parameters" />
       <module name="api_gateteway" options="-parameters" />
+      <module name="officeportal" options="-parameters" />
       <module name="service-reg" options="-parameters" />
     </option>
   </component>
