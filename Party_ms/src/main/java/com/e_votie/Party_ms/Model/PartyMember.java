@@ -27,9 +27,11 @@ public class PartyMember{
     private String profilePicture;
 
     @OneToMany(mappedBy = "partyMember")
+    @JsonIgnoreProperties("partyMembers")
     private List<Manifesto> manifestos = new ArrayList<>();
 
     @ElementCollection
+    @JsonIgnoreProperties("partyMembers")
     private List<String> topics = new ArrayList<>();
 
     @ManyToOne

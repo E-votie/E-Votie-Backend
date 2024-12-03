@@ -76,8 +76,8 @@ public class PartyService {
 
         // add party secretary
         try {
-            PartyMember createdPartyMember = partyMemberService.registerNewPartyMember(
-                    String.valueOf(savedParty.getRegistrationId()), userId, "Secretary"
+            PartyMember createdPartyMember = partyMemberService.registerNewPartyOfficial(
+                    String.valueOf(savedParty.getRegistrationId()), userId, party.getSecretoryName(),"Secretary", "The secretary oversees party records, coordinates communication, and ensures smooth administration."
             );
         } catch (Exception e) {
             System.err.println("Error creating party member: " + e.getMessage());
@@ -86,8 +86,8 @@ public class PartyService {
 
         // add party leader
         try {
-            PartyMember createdPartyMember = partyMemberService.registerNewPartyMember(
-                    String.valueOf(savedParty.getRegistrationId()), party.getLeaderId(), "Leader"
+            PartyMember createdPartyMember = partyMemberService.registerNewPartyOfficial(
+                    String.valueOf(savedParty.getRegistrationId()), party.getLeaderId(), party.getLeaderName(),"Leader", "The leader sets the party’s vision, represents it publicly, drives its mission, and inspires members to work towards collective goals."
             );
         } catch (Exception e) {
             System.err.println("Error creating party member: " + e.getMessage());

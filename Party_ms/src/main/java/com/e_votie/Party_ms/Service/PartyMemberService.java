@@ -47,6 +47,25 @@ public class PartyMemberService {
         }
     }
 
+    //register a new party official
+    public PartyMember registerNewPartyOfficial(String partyId, String voterId, String officialName, String role, String description) throws Exception {
+        Optional<Party> partyOptional = partyRepository.findById(Integer.valueOf(partyId));
+
+        if (partyOptional.isPresent()) {
+            PartyMember newPartyMember = new PartyMember();
+            newPartyMember.setPartyMemberId(voterId);
+            newPartyMember.setPartyMemberName(officialName);
+            newPartyMember.setNIC(voterId);
+            newPartyMember.setRole(role);
+            newPartyMember.setPartyMemberDescription(description);
+            newPartyMember.setParty(partyOptional.get());
+
+            return partyMemberRepository.save(newPartyMember);
+        } else {
+            throw new Exception("Party with ID " + partyId + " not found");
+        }
+    }
+
     //retrieve logged party member using given nic
     public PartyMember getPartyMemberByToken(Jwt jwt) throws Exception {
         String nic = jwt.getClaimAsString("preferred_username");
