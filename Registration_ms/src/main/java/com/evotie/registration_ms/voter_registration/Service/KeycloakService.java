@@ -1,6 +1,7 @@
 package com.evotie.registration_ms.voter_registration.Service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,14 @@ import java.util.*;
 @Service
 public class KeycloakService {
 
-    private final String keycloakUrl = "http://localhost:8086/auth";
+    @Value("${keycloak.auth-server-url}")
+    private String keycloakUrl;
     private final String realm = "demo";
     private final String clientId = "demo-rest-api";
 
     private String getToken(){
+        log.info("------------------------>>>>>>>>>>>>>>>>>>>>>>>>>>++++++++++++++++++++++++++++++");
+        log.info("Getting token");
         RestTemplate restTemplate = new RestTemplate();
 
         // Get access token
@@ -29,12 +33,12 @@ public class KeycloakService {
         tokenBody.add("grant_type", "password");
         tokenBody.add("client_id", clientId);
         tokenBody.add("username", "admin");
-        tokenBody.add("password", "admin");
+        tokenBody.add("password", "1111");
 
         HttpEntity<MultiValueMap<String, String>> tokenRequest = new HttpEntity<>(tokenBody, tokenHeaders);
 
         ResponseEntity<Map> tokenResponse = restTemplate.postForEntity(
-                "http://localhost:8086/realms/demo/protocol/openid-connect/token",
+                keycloakUrl + "/realms/demo/protocol/openid-connect/token",
                 tokenRequest,
                 Map.class
         );
@@ -70,7 +74,7 @@ public class KeycloakService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(userRequest, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-                "http://localhost:8086/admin/realms/demo/users",
+                keycloakUrl+"/admin/realms/demo/users",
                 request,
                 String.class
         );
@@ -102,7 +106,7 @@ public class KeycloakService {
 
         // First, get all client roles
         ResponseEntity<List<Map<String, Object>>> rolesResponse = restTemplate.exchange(
-                "http://localhost:8086/admin/realms/demo/clients/162f9e0e-64e2-4ae7-84fe-93d625a161bd/roles",
+                keycloakUrl+"/admin/realms/demo/clients/162f9e0e-64e2-4ae7-84fe-93d625a161bd/roles",
                 HttpMethod.GET,
                 entity,
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
@@ -129,7 +133,7 @@ public class KeycloakService {
 
         // Assign the client role to the user
         ResponseEntity<Void> response = restTemplate.exchange(
-                "http://localhost:8086/admin/realms/demo/users/" + userId + "/role-mappings/clients/162f9e0e-64e2-4ae7-84fe-93d625a161bd",
+                keycloakUrl + "/admin/realms/demo/users/" + userId + "/role-mappings/clients/162f9e0e-64e2-4ae7-84fe-93d625a161bd",
                 HttpMethod.POST,
                 requestEntity,
                 Void.class

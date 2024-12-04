@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://e_votie.lahirujayathilake.me")
 @RequestMapping("api/application")
 public class ApplicationController {
 

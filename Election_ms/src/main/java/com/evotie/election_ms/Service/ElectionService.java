@@ -19,6 +19,8 @@ public interface ElectionService {
     public ResponseEntity<?> getCandidatesByIdAndStatus(Long electionId, String status);
     public ResponseEntity<?> setStatusCandidates(Long electionId, Long candidateId, String status);
     public ResponseEntity<?> deployContract(Long electionId);
-
+    public ResponseEntity<?> getCandidatesInfo(Long electionId);
+    public ResponseEntity<?> getElectionByStatus(String electionId);
+    public ResponseEntity<?> vote(String electionId);
     List<Election> getAllElections();
 }

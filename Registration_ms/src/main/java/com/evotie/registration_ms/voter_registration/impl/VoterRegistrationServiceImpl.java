@@ -77,7 +77,7 @@ public class VoterRegistrationServiceImpl implements VoterRegistrationService {
         }
         tempContactInfoRepo.save(tempContactInfo);
         Map<String, Object> variables = new HashMap<>();
-        String verificationLink = "http://localhost:5173/verify/" + tempContactInfo.getHash();
+        String verificationLink = "https://e_votie.lahirujayathilake.me/verify/" + tempContactInfo.getHash();
         variables.put("verification_link", verificationLink);
         try {
             sendEmail.triggerSendEmail(tempContactInfo.getEmail(), "Voter Registration", "Please verify your email address by clicking the link below. " + verificationLink, true, "email_verification", variables);
@@ -298,13 +298,18 @@ public class VoterRegistrationServiceImpl implements VoterRegistrationService {
 
     @Override
     public ResponseEntity<?> verificationOfficerSignature(SignDTO sign) {
+        log.info("Verification Officer Signature");
         VoterRegistration voterRegistration = voterRegistrationRepo.findByApplicationID(sign.getApplicationID());
         voterRegistration.setVerificationOfficerSignature(sign.getSign());
         voterRegistration.setStatus("Verified");
         voterRegistrationRepo.save(voterRegistration);
         String pwd = RandomStringUtils.randomAlphanumeric(5);
+        log.info("Staring Keycloak User Creation");
         String userID = keycloakService.createUser(voterRegistration.getNIC(), voterRegistration.getEmail(), voterRegistration.getName(), "null", pwd);
+        log.info("Keycloak User Created");
+        log.info("Assigning Role to User");
         keycloakService.assignRoleToUser(userID, "Voter");
+        log.info("Role Assigned");
         ModelMapper modelMapper = new ModelMapper();
 //        voterService.createVoter(voterRegistration.getNIC(), voterRegistration.getName(), "300", "tyasgvhbbusydbbcj");
         modelMapper.typeMap(VoterRegistration.class, Voter.class).addMappings(mapper -> mapper.skip(Voter::setVoterID));

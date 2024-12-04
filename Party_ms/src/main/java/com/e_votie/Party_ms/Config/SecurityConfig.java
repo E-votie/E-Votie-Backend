@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/party/**").permitAll()  // Allow unauthenticated access to party APIs
                         .requestMatchers("/api/voter/**").permitAll()  // Allow unauthenticated access to voter APIs
                         .requestMatchers("/api/document/**").permitAll()  // Allow unauthenticated access to document APIs
+                        .requestMatchers("/api/request/**").permitAll()
                         .anyRequest().authenticated()                 // Require authentication for all other requests
                 )
 

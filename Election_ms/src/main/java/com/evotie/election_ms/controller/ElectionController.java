@@ -69,7 +69,7 @@ public class ElectionController {
         return electionService.setStatusCandidates(electionId, selectedCandidate, status);
     }
 
-    @GetMapping("deploy_cantract/{electionId}")
+    @GetMapping("deploy_contract/{electionId}")
     public ResponseEntity<?> deployContract(@PathVariable Long electionId){
         return electionService.deployContract(electionId);
     }
@@ -91,5 +91,20 @@ public class ElectionController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/get_candidates_info/{electionId}")
+    public ResponseEntity<?> getCandidatesInfo(@PathVariable Long electionId){
+        return electionService.getCandidatesInfo(electionId);
+    }
+
+    @GetMapping("/get_election/{status}")
+    public ResponseEntity<?> getElectionByStatus(@PathVariable String status){
+        return electionService.getElectionByStatus(status);
+    }
+
+    @GetMapping("/vote/{candidateId}")
+    public ResponseEntity<?> vote(@PathVariable String candidateId){
+        return electionService.vote(candidateId);
     }
 }

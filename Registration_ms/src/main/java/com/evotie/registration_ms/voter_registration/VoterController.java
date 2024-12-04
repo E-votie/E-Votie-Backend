@@ -23,7 +23,6 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/voter")
-@CrossOrigin(origins = "http://localhost:5173")
 @Validated
 public class VoterController {
 
@@ -64,6 +63,16 @@ public class VoterController {
         }
     }
 
+    @GetMapping("/nominate/{nominationNumber}/{candidateNIC}")
+    public ResponseEntity<?> nominate(@PathVariable String nominationNumber, @PathVariable String candidateNIC){
+        return voterService.nominate(nominationNumber, candidateNIC);
+    }
+
+    @GetMapping("/election_registration/{electionID}/{voterNIC}")
+    public ResponseEntity<?> electionRegister(@PathVariable String electionID, @PathVariable String voterNIC){
+        return voterService.electionRegister(electionID, voterNIC);
+    }
+
     @PostMapping("/vote")
     public ResponseEntity<?> Vote(){
         Map<String, Object> response = new HashMap<>();
@@ -79,6 +88,15 @@ public class VoterController {
                 return new ResponseEntity<>("Not a Registered Voter", HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>(existingVoter, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Voter Not Found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/is_registered/{electionID}/{nic}")
+    private ResponseEntity<?> isRegistered(@PathVariable String electionID, @PathVariable String nic){
+        try{
+            return ResponseEntity.ok(voterService.isRegistered(electionID, nic));
         }catch (Exception e){
             return new ResponseEntity<>("Voter Not Found", HttpStatus.NOT_FOUND);
         }

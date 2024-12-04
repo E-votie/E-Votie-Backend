@@ -49,6 +49,7 @@ public class Hyperlegerfabric_Service {
         inputNode.put("electionID", electionID);
         inputNode.put("eligibility", eligibility);
         inputNode.put("pollingStation", pollingStation);
+        log.info("Assign Voter To Election: " + inputNode.toString());
 
         return sendPostRequest(url, inputNode);
     }
@@ -86,7 +87,7 @@ public class Hyperlegerfabric_Service {
         ObjectNode inputNode = mapper.createObjectNode();
         inputNode.put("electionID", electionID);
         inputNode.put("voterID", voterID);
-
+        log.info("Get Voter Election Relation: " + inputNode.toString());
         return sendPostRequest(url, inputNode);
     }
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://e_votie.lahirujayathilake.me")
 @RequestMapping("api/voter/")
 public class VoterController {
 

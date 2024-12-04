@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Optional;
 
-@FeignClient(name = "registration-ms", url = "http://localhost:8081")
+@FeignClient(name = "REGISTRATION-MS")
 public interface VoterService {
 
     @GetMapping("/voter/my_details")

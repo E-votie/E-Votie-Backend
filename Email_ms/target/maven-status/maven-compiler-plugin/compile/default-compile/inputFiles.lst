@@ -1,10 +1,10 @@
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\config\kafkaConfig.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\Email.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailKafkaConsumer.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailKafkaProducer.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailMsApplication.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailRepository.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailRequest.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\EmailService.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\Massage.java
-E:\31First Sem\E-Votie-Backend\Email_ms\src\main\java\com\evotie\email_ms\URLReader.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/EmailMsApplication.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/Model/Email.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/Model/EmailRequest.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/Model/Massage.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/URLReader.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/config/EmailKafkaConsumer.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/config/EmailKafkaProducer.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/config/kafkaConfig.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/repo/EmailRepository.java
+/home/lahiru/Desktop/E-Votie/E-Votie-Backend/Email_ms/src/main/java/com/evotie/email_ms/service/EmailService.java

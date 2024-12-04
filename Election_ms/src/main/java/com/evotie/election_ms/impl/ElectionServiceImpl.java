@@ -8,7 +8,10 @@ import com.evotie.election_ms.model.Location;
 import com.evotie.election_ms.repo.CandidateRepo;
 import com.evotie.election_ms.repo.ElectionRepo;
 import com.evotie.election_ms.repo.LocationRepo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -35,6 +38,12 @@ public class ElectionServiceImpl implements ElectionService {
         this.locationRepo = locationRepo;
         this.candidateRepo = candidateRepo;
     }
+
+    @Value("${VotingContract_URL}")
+    private String votingContractUrl;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public ResponseEntity<?> addNewCandidate(Jwt jwt) {
@@ -143,14 +152,16 @@ public class ElectionServiceImpl implements ElectionService {
     @Override
     public ResponseEntity<?> deployContract(Long electionId) {
         Election election = electionRepo.findById(electionId).orElse(null);
+        log.info("Deploying contract for election: {}", election);
         if (election == null) {
             return ResponseEntity.badRequest().body(new ResponseDTO("Election not found", "400", null));
         }
-        List<Integer> candidateIds = candidateRepo.findByElectionId(electionId).stream()
+        List<String> candidateIds = candidateRepo.findByElectionId(electionId).stream()
                 .map(Candidates::getNumber)
-                .map(Integer::parseInt)
                 .collect(Collectors.toList());
-        String contractAddress = publishContract(election.getElectionDayStartDate(), election.getElectionDayEndDate(), candidateIds);
+        String contractDetails = publishContract(election.getElectionDayStartDate(), election.getElectionDayEndDate(), candidateIds);
+        String contractAddress = contractDetails.substring(27, 69);
+        log.info("Contract address: {}", contractAddress);
         if (contractAddress == null) {
             return ResponseEntity.badRequest().body(new ResponseDTO("Error deploying contract", "400", null));
         }
@@ -164,7 +175,31 @@ public class ElectionServiceImpl implements ElectionService {
         return electionRepo.findAll();
     }
 
-    private String publishContract(LocalDateTime electionDayStartDate, LocalDateTime electionDayEndDate, List<Integer> candidateIds) {
+    @Override
+    public ResponseEntity<?> getCandidatesInfo(Long electionId) {
+//        List<Candidates> candidates = candidateRepo.findByElectionIdAndStatus(electionId, "Accepted");
+//        Map<String, ?> candidateImageMap = new HashMap<>();
+//        for (Candidates candidate : candidates) {
+//            // Extract candidate id and images (assuming getImage() and getPartyImage() return URLs or paths to the images)
+//            String candidateId = candidate.get;
+//            String candidateImage = candidate.getImage();    // Candidate image URL or path
+//            String partyImage = candidate.getPartyImage();   // Party image URL or path
+//
+//            // Create a map for each candidate's images
+//            Map<String, String> images = new HashMap<>();
+//            images.put("candidateImage", candidateImage);
+//            images.put("partyImage", partyImage);
+//
+//            // Put candidate id as key and the images map as value
+//            candidateImageMap.put(candidateId, images);
+//        }
+//        if (candidates != null) {
+//            return ResponseEntity.ok().body(new ResponseDTO("Candidates fetched successfully", "200", candidates));
+//        }
+        return null;
+    }
+
+    private String publishContract(LocalDateTime electionDayStartDate, LocalDateTime electionDayEndDate, List<String> candidateIds) {
         try {
             // Convert LocalDateTime to Unix timestamp (seconds)
             long votingStartTimestamp = electionDayStartDate.toEpochSecond(ZoneOffset.UTC);
@@ -187,10 +222,49 @@ public class ElectionServiceImpl implements ElectionService {
 
             RestTemplate restTemplate = new RestTemplate();
             // Make a POST request to the contract deployment endpoint
-            return restTemplate.postForObject("http://localhost:8080/deploy-contract", entity, String.class);
+            return restTemplate.postForObject("http://localhost:3000/deploy-contract", entity, String.class);
         } catch (Exception e) {
             log.error("Error deploying contract", e);
             return null;
         }
     }
+
+    @Override
+    public ResponseEntity<?> getElectionByStatus(String status) {
+        Election election = electionRepo.findByStatus(status).get(0);
+        if (election == null) {
+            return ResponseEntity.badRequest().body(new ResponseDTO("Election not found", "400", null));
+        }
+        return ResponseEntity.ok().body(new ResponseDTO("Election fetched successfully", "200", election));
+    }
+
+    @Override
+    public ResponseEntity<?> vote(String CandidateID) {
+        long electionId = 1;
+        Election election = electionRepo.findById(electionId).orElse(null);
+        log.info("Voting for candidate: {}", election.getContractAddress());
+        String url = votingContractUrl;
+        ObjectNode inputNode = mapper.createObjectNode();
+        inputNode.put("contractAddress", election.getContractAddress());
+        inputNode.put("candidateIndex", CandidateID);
+        log.info("Assign Voter To Election: " + inputNode.toString());
+        return sendPostRequest(url, inputNode);
+    }
+
+    private ResponseEntity<String> sendPostRequest(String url, ObjectNode inputNode) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String requestBody;
+        try {
+            requestBody = mapper.writeValueAsString(inputNode);
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating JSON request body", e);
+        }
+        log.info(requestBody);
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+        return restTemplate.postForEntity(url, request, String.class);
+    }
+
+
 }

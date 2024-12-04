@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/manifesto")
+@CrossOrigin(origins = "https://e_votie.lahirujayathilake.me")
 public class ManifestoController {
 
    @Autowired

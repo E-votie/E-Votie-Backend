@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/voter-registration/**").permitAll()
                         .requestMatchers("/api/files/upload").permitAll()
                         .requestMatchers("/fingerprint-websocket").permitAll()
+                        .requestMatchers("/election/vote/**").permitAll()
                         .anyRequest().
                         authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2
